@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "none",
+        "baseUrl": "./",
+        "charset": "utf-8",
+        "newLine": "lf",
+        "removeComments": false,
+        "emitBOM": false,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noImplicitAny": true,
+        "noEmitOnError": true,
+        "strict": true,
+        "lib": [
+            "es5",
+            "ES2015.Promise",
+            "DOM"
+        ],
+        "outDir": "./dest/plugin/"
+    },
+    "include": [
+        "./src/plugin/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
