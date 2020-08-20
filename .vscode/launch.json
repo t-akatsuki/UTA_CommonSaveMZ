@@ -1,0 +1,34 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        // debug for browser (debug mode)
+        // This debug is required "Google Chrome"
+        {
+            "name": "chrome debug",
+            "request": "launch",
+            "type": "chrome",
+            "file": "${workspaceFolder}/test/index.html?test",
+            "webRoot": "${workspaceFolder}/test",
+            "runtimeArgs": [
+                "--allow-file-access-from-files",
+                "--remote-debugging-port=9222"
+            ]
+        },
+        // debug for NW.js (debug mode)
+        // This debug is required "Debugger for NWjs"
+        // RPGMakerMZ v1.0.0 : NW.js v0.44.5
+        {
+            "name": "nw.js debug",
+            "type": "nwjs",
+            "request": "launch",
+            "nwjsVersion": "0.44.5-sdk",
+            "webRoot": "${workspaceFolder}/test",
+            "reloadAfterAttached": true,
+            "runtimeArgs": [
+                // Launch debug mode on RPGMakerMZ
+                "--args&test",
+                "--allow-file-access-from-files"
+            ]
+        }
+    ]
+}
