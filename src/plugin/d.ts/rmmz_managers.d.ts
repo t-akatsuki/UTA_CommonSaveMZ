@@ -14,8 +14,18 @@ declare class DataManager {
     public static loadGame(savefileId: number): Promise<number>;
 }
 
+declare var $dataSystem: {
+    startMapId: number;
+    startX: number;
+    startY: number;
+};
+
+declare var $gameSystem: Game_System;
 declare var $gameSwitches: Game_Switches;
 declare var $gameVariables: Game_Variables;
+declare var $gameParty: Game_Party;
+declare var $gameMap: Game_Map;
+declare var $gamePlayer: Game_Player;
 
 /**
  * @class StorageManager
