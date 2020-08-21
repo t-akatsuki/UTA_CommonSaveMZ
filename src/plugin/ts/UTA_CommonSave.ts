@@ -476,6 +476,34 @@ namespace utakata {
         public static isApplyOnGameover(): boolean {
             return this.parameters.applyOnGameover === "true";
         }
+
+        /**
+         * 「初めから」即セーブ状態であるかを判定する。
+         * 一度タイトル画面に戻ってから「初めから」を選んだ場合に
+         * 何故かオートセーブ処理が実行されてしまい共有セーブが初期状態で上書きされてしまう状態を
+         * 回避する為の判定処理。
+         * 対症療法である為、この処理はコアスクリプトの改修に合わせて修正する。
+         * @static
+         * @return {boolean} 「初めから」即セーブの場合はtrueを返す。
+         */
+        public static checkNewGame(): boolean {
+            // 「初めから」の場合はセーブカウントが必ず0から始まる
+            // $gameSystem.onBeforeSaveでインクリメントされる為、
+            // StorageManager.saveObjectのタイミングで必ず1以上になる
+            // 初めから即セーブ時は必ず1になる
+            if ($gameSystem.saveCount() > 1) {
+                return false;
+            }
+            // 「初めから」の場合は必ず初期設定座標にプレイヤーが配置されるはず
+            if ($gameMap.mapId() !== $dataSystem.startMapId || $gamePlayer.x !== $dataSystem.startX || $gamePlayer.y !== $dataSystem.startY || $gamePlayer.direction() !== 2) {
+                return false;
+            }
+            // 「初めから」即セーブのタイミングでは歩数カウントが0であるはず
+            if ($gameParty.steps() > 0) {
+                return false;
+            }
+            return true;
+        }
     }
     CommonSave.initialize();
 
@@ -510,8 +538,12 @@ namespace utakata {
     DataManager.saveGame = function (savefileId: number): Promise<number> {
         return _DataManager_saveGame.call(this, savefileId).then((ret: number) => {
             // savefileId = 0 is auto save
+            // v1.0.1:
+            // 一度タイトル画面に戻ってから「初めから」を選んだ場合に
+            // 何故かオートセーブ処理が実行されてしまい共有セーブが初期状態で上書きされてしまう
+            // この現象を回避する為に明らかにゲームスタート直後の場合は共有セーブしないようにする
             if (savefileId === 0) {
-                if (CommonSave.isApplyOnAutoSave()) {
+                if (CommonSave.isApplyOnAutoSave() && !CommonSave.checkNewGame()) {
                     return CommonSave.save();
                 }
                 return ret;
