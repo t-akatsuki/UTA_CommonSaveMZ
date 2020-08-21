@@ -17,13 +17,6 @@
  * @author 赤月 智平
  * @url https://www.utakata-no-yume.net
  *
- * @param saveFileName
- * @text 共有セーブデータファイル名
- * @desc 共有セーブデータを記録するセーブデータファイル名の定義です。
- * 拡張子は自動設定される為含めません。
- * @default uta_common
- * @type string
- *
  * @param targetSwitches
  * @text 共有対象スイッチ番号
  * @desc セーブデータ間で共有するスイッチ番号の定義です。
@@ -40,31 +33,45 @@
  *
  * @param applyOnLoad
  * @text ロード時の共有セーブ自動適用
- * @desc ロード時に共有セーブデータを自動適用を行うか。
- * true: 自動適用する, false: 自動適用しない
+ * @desc ロード時に共有セーブデータの自動適用を行うか。
+ * ON(true): 自動適用する, OFF(false): 自動適用しない
  * @default true
  * @type boolean
  *
  * @param applyOnSave
  * @text セーブ時の共有セーブ自動保存
  * @desc セーブ時に共有セーブデータの自動保存を行うか。
- * true: 自動保存する, false: 自動保存しない
+ * ON(true): 自動保存する, OFF(false): 自動保存しない
+ * @default true
+ * @type boolean
+ *
+ * @param applyOnNewGame
+ * @text ニューゲーム時の共有セーブ自動適用
+ * @desc ニューゲーム時に共有セーブの自動適用を行うか。
+ * ON(true): 自動適用する, OFF(false): 自動適用しない
  * @default true
  * @type boolean
  *
  * @param applyOnAutoSave
  * @text オートセーブ時の共有セーブ自動保存
  * @desc オートセーブ時に共有セーブの自動保存を行うか。
- * true: 自動保存する, false: 自動保存しない
+ * ON(true): 自動保存する, OFF(false): 自動保存しない
  * @default false
  * @type boolean
  *
  * @param applyOnGameover
  * @text ゲームオーバー時の共有セーブ自動保存
  * @desc ゲームオーバー時に共有セーブデータの自動保存を行うか。
- * true: 自動保存する, false: 自動保存しない
- * @default false
+ * ON(true): 自動保存する, OFF(false): 自動保存しない
+ * @default true
  * @type boolean
+ *
+ * @param saveFileName
+ * @text 共有セーブデータファイル名
+ * @desc 共有セーブデータを記録するセーブデータファイル名の定義です。
+ * 拡張子は自動設定される為含めません。
+ * @default uta_common
+ * @type string
  *
  * @command load
  * @text 共有セーブデータのロード
@@ -115,6 +122,7 @@ namespace utakata {
         targetVariables: string;
         applyOnLoad: string;
         applyOnSave: string;
+        applyOnNewGame: string;
         applyOnAutoSave: string;
         applyOnGameover: string;
     }
@@ -452,6 +460,15 @@ namespace utakata {
         }
 
         /**
+         * ニューゲーム時に共有セーブデータをロードするか。
+         * @static
+         * @return {boolean}
+         */
+        public static isApplyOnNewGame(): boolean {
+            return this.parameters.applyOnNewGame === "true";
+        }
+
+        /**
          * ゲームオーバー時に共有セーブデータをセーブするか。
          * @static
          * @return {boolean}
@@ -481,6 +498,14 @@ namespace utakata {
     /**
      * DataManager
      */
+    const _DataManager_setupNewGame = DataManager.setupNewGame;
+    DataManager.setupNewGame = function (): void {
+        _DataManager_setupNewGame.call(this);
+        if (CommonSave.isApplyOnNewGame()) {
+            CommonSave.load();
+        }
+    };
+
     const _DataManager_saveGame = DataManager.saveGame;
     DataManager.saveGame = function (savefileId: number): Promise<number> {
         return _DataManager_saveGame.call(this, savefileId).then((ret: number) => {
