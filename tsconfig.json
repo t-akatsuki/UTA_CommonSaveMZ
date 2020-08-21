@@ -26,7 +26,7 @@
         "./src/plugin/d.ts/rmmz_scenes.d.ts"
     ],
     "include": [
-        "./src/plugin/*.ts"
+        "./src/plugin/ts/*.ts"
     ],
     "exclude": [
         "node_modules"
