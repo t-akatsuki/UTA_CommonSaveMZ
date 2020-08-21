@@ -2,6 +2,14 @@
 // rmmz_objects.js v1.0.0
 //=============================================================================
 /**
+ * @class Game_System
+ * @classdesc The game object class for the system data.
+ */
+declare class Game_System {
+    public saveCount(): number;
+}
+
+/**
  * @class Game_Switches
  * @clssdesc The game object class for switches.
  */
@@ -27,6 +35,58 @@ declare class Game_Variables {
     public value(variableId: number): number;
     public setValue(variableId: number, value: number): void;
     public onChange(): void;
+}
+
+/**
+ * @class Game_Unit
+ * @classdesc The superclass of Game_Party and Game_Troop.
+ */
+declare class Game_Unit {
+}
+
+/**
+ * @class Game_Party
+ * @classdesc The game object class for the party. Information such as gold and items is
+ * included.
+ */
+declare class Game_Party extends Game_Unit {
+    public steps(): number;
+}
+
+/**
+ * @class Game_Map
+ * @classdesc The game object class for a map. It contains scrolling and passage
+ * determination functions.
+ */
+declare class Game_Map {
+    public mapId(): number;
+}
+
+/**
+ * @class Game_CharacterBase
+ * @classdesc The superclass of Game_Character. It handles basic information, such as
+ * coordinates and images, shared by all characters.
+ */
+declare class Game_CharacterBase {
+    public x: number;
+    public y: number;
+
+    public direction(): number;
+}
+
+/**
+ * @class Game_Character
+ * @classdesc The superclass of Game_Player, Game_Follower, GameVehicle, and Game_Event.
+ */
+declare class Game_Character extends Game_CharacterBase {
+}
+
+/**
+ * @class Game_Player
+ * @classdesc The game object class for the player. It contains event starting
+ * determinants and map scrolling functions.
+ */
+declare class Game_Player extends Game_Character {
 }
 
 /**
