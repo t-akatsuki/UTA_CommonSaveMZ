@@ -2,27 +2,13 @@
 //=============================================================================
 // UTA_CommonSave.js
 //=============================================================================
-/*:
- * @target MZ
- * @plugindesc hogehoge
- * @author t-akatsuki
- * @url https://www.utakata-no-yume.net
- *
- * @help てすと
- */
 /*:ja
  * @target MZ
- * @plugindesc hogehoge
+ * @plugindesc セーブデータ間で共有のセーブデータを作成し、
+ * 指定したスイッチ・変数の状態をセーブデータ間で共有します。
  *
- * @author 赤月 智平
+ * @author 赤月 智平(t-akatsuki)
  * @url https://www.utakata-no-yume.net
- *
- * @param saveFileName
- * @text 共有セーブデータファイル名
- * @desc 共有セーブデータを記録するセーブデータファイル名の定義です。
- * 拡張子は自動設定される為含めません。
- * @default uta_common
- * @type string
  *
  * @param targetSwitches
  * @text 共有対象スイッチ番号
@@ -40,31 +26,45 @@
  *
  * @param applyOnLoad
  * @text ロード時の共有セーブ自動適用
- * @desc ロード時に共有セーブデータを自動適用を行うか。
- * true: 自動適用する, false: 自動適用しない
+ * @desc ロード時に共有セーブデータの自動適用を行うか。
+ * ON(true): 自動適用する, OFF(false): 自動適用しない
  * @default true
  * @type boolean
  *
  * @param applyOnSave
  * @text セーブ時の共有セーブ自動保存
  * @desc セーブ時に共有セーブデータの自動保存を行うか。
- * true: 自動保存する, false: 自動保存しない
+ * ON(true): 自動保存する, OFF(false): 自動保存しない
+ * @default true
+ * @type boolean
+ *
+ * @param applyOnNewGame
+ * @text ニューゲーム時の共有セーブ自動適用
+ * @desc ニューゲーム時に共有セーブの自動適用を行うか。
+ * ON(true): 自動適用する, OFF(false): 自動適用しない
  * @default true
  * @type boolean
  *
  * @param applyOnAutoSave
  * @text オートセーブ時の共有セーブ自動保存
  * @desc オートセーブ時に共有セーブの自動保存を行うか。
- * true: 自動保存する, false: 自動保存しない
+ * ON(true): 自動保存する, OFF(false): 自動保存しない
  * @default false
  * @type boolean
  *
  * @param applyOnGameover
  * @text ゲームオーバー時の共有セーブ自動保存
  * @desc ゲームオーバー時に共有セーブデータの自動保存を行うか。
- * true: 自動保存する, false: 自動保存しない
- * @default false
+ * ON(true): 自動保存する, OFF(false): 自動保存しない
+ * @default true
  * @type boolean
+ *
+ * @param saveFileName
+ * @text 共有セーブデータファイル名
+ * @desc 共有セーブデータを記録するセーブデータファイル名の定義です。
+ * 拡張子は自動設定される為含めません。
+ * @default uta_common
+ * @type string
  *
  * @command load
  * @text 共有セーブデータのロード
@@ -86,9 +86,26 @@
  * @desc 共有対象のスイッチ/変数番号をコンソールに表示します。
  * 動作確認用のプラグインコマンドです。
  *
- * @help
+ * @help ■概要
+ *
+ * ■プラグインパラメーター
  *
  * ■プラグインコマンド
+ *   [共有セーブデータのロード]
+ *   共有セーブデータからスイッチ・変数を読み込み反映させます。
+ *   任意のタイミングで共有セーブデータをロードする際に使用します。
+ *
+ *   [共有セーブデータのセーブ]
+ *   共有セーブデータに対象のスイッチ・変数の状態を記録します。
+ *   任意のタイミングで共有セーブデータをセーブする際に使用します。
+ *
+ *   [共有セーブデータの削除]
+ *   共有セーブデータファイルを削除します。
+ *   共有セーブデータをリセットしたい場合に使用します。
+ *
+ *   [共有対象スイッチ/変数の確認]
+ *   共有対象のスイッチ/変数番号をコンソールに表示します。
+ *   動作確認用のプラグインコマンドです。
  *
  * ■プラグインの情報
  *   バージョン : 0.1.0
@@ -96,7 +113,7 @@
  *   制作者     : 赤月 智平(t-akatsuki)
  *   Webサイト  : https://www.utakata-no-yume.net
  *   GitHub     : https://github.com/t-akatsuki/RMMZ_UTA_CommonSave
- *   Twitter    : @T_Akatsuki
+ *   Twitter    : https://twitter.com/T_Akatsuki
  *   ライセンス : MIT License
  *
  * ■更新履歴
@@ -400,12 +417,47 @@ var utakata;
             return this.parameters.applyOnAutoSave === "true";
         };
         /**
+         * ニューゲーム時に共有セーブデータをロードするか。
+         * @static
+         * @return {boolean}
+         */
+        CommonSave.isApplyOnNewGame = function () {
+            return this.parameters.applyOnNewGame === "true";
+        };
+        /**
          * ゲームオーバー時に共有セーブデータをセーブするか。
          * @static
          * @return {boolean}
          */
         CommonSave.isApplyOnGameover = function () {
             return this.parameters.applyOnGameover === "true";
+        };
+        /**
+         * 「初めから」即セーブ状態であるかを判定する。
+         * 一度タイトル画面に戻ってから「初めから」を選んだ場合に
+         * 何故かオートセーブ処理が実行されてしまい共有セーブが初期状態で上書きされてしまう状態を
+         * 回避する為の判定処理。
+         * 対症療法である為、この処理はコアスクリプトの改修に合わせて修正する。
+         * @static
+         * @return {boolean} 「初めから」即セーブの場合はtrueを返す。
+         */
+        CommonSave.checkNewGame = function () {
+            // 「初めから」の場合はセーブカウントが必ず0から始まる
+            // $gameSystem.onBeforeSaveでインクリメントされる為、
+            // StorageManager.saveObjectのタイミングで必ず1以上になる
+            // 初めから即セーブ時は必ず1になる
+            if ($gameSystem.saveCount() > 1) {
+                return false;
+            }
+            // 「初めから」の場合は必ず初期設定座標にプレイヤーが配置されるはず
+            if ($gameMap.mapId() !== $dataSystem.startMapId || $gamePlayer.x !== $dataSystem.startX || $gamePlayer.y !== $dataSystem.startY || $gamePlayer.direction() !== 2) {
+                return false;
+            }
+            // 「初めから」即セーブのタイミングでは歩数カウントが0であるはず
+            if ($gameParty.steps() > 0) {
+                return false;
+            }
+            return true;
         };
         /**
          * プラグイン名称定義
@@ -444,12 +496,23 @@ var utakata;
     /**
      * DataManager
      */
+    var _DataManager_setupNewGame = DataManager.setupNewGame;
+    DataManager.setupNewGame = function () {
+        _DataManager_setupNewGame.call(this);
+        if (CommonSave.isApplyOnNewGame()) {
+            CommonSave.load();
+        }
+    };
     var _DataManager_saveGame = DataManager.saveGame;
     DataManager.saveGame = function (savefileId) {
         return _DataManager_saveGame.call(this, savefileId).then(function (ret) {
             // savefileId = 0 is auto save
+            // v1.0.1:
+            // 一度タイトル画面に戻ってから「初めから」を選んだ場合に
+            // 何故かオートセーブ処理が実行されてしまい共有セーブが初期状態で上書きされてしまう
+            // この現象を回避する為に明らかにゲームスタート直後の場合は共有セーブしないようにする
             if (savefileId === 0) {
-                if (CommonSave.isApplyOnAutoSave()) {
+                if (CommonSave.isApplyOnAutoSave() && !CommonSave.checkNewGame()) {
                     return CommonSave.save();
                 }
                 return ret;
