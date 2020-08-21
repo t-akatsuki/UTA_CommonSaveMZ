@@ -19,6 +19,12 @@
         ],
         "outFile": "./dest/plugin/UTA_CommonSave.js"
     },
+    "files": [
+        "./src/plugin/d.ts/rmmz_core.d.ts",
+        "./src/plugin/d.ts/rmmz_objects.d.ts",
+        "./src/plugin/d.ts/rmmz_managers.d.ts",
+        "./src/plugin/d.ts/rmmz_scenes.d.ts"
+    ],
     "include": [
         "./src/plugin/*.ts"
     ],
