@@ -125,6 +125,12 @@
 namespace utakata {
     "use strict";
 
+    interface Version {
+        major: number;
+        minor: number;
+        release: number;
+    }
+
     interface CommonSavePluginParameters {
         saveFileName: string;
         targetSwitches: string;
@@ -137,6 +143,7 @@ namespace utakata {
     }
 
     interface CommonSaveData {
+        version: Version;
         gameSwitches: { [idx: number]: boolean };
         gameVariables: { [idx: number]: number };
     }
@@ -151,7 +158,16 @@ namespace utakata {
          * プラグイン名称定義
          * @type {string}
          */
-        public static readonly PLUGIN_NAME = "UTA_CommonSave";
+        public static readonly PLUGIN_NAME: string = "UTA_CommonSave";
+        /**
+         * プラグインのバージョン定義
+         * @type {object}
+         */
+        public static readonly PLUGIN_VERSION: Version = {
+            major: 0,
+            minor: 9,
+            release: 0
+        };
         /**
          * 共有対象のスイッチ番号定義
          * @type {number[]}
@@ -236,13 +252,16 @@ namespace utakata {
          */
         private static parseTargetNumber(targetStr: string): number[] {
             var ret: number[] = [];
+            const emptyPattern = /^$/;
             const singlePattern = /^[0-9]+$/;
             const regionPattern = /^[0-9]+-[0-9]+$/;
 
             try {
                 targetStr = targetStr.trim();
-
-                if (targetStr.match(singlePattern)) {
+                if (targetStr.match(emptyPattern)) {
+                    // empty
+                    console.info("CommonSave.parseTargetNumber: skip parsing because ditected empty string.");
+                } else if (targetStr.match(singlePattern)) {
                     // single number
                     // ex. 10
                     const num = parseInt(targetStr, 10);
@@ -320,6 +339,7 @@ namespace utakata {
          */
         private static makeSaveContents(): CommonSaveData {
             const contents: CommonSaveData = {
+                "version": this.PLUGIN_VERSION,
                 "gameSwitches": this.makeTargetGameSwitchesJson(),
                 "gameVariables": this.makeTargetGameVariablesJson()
             };
