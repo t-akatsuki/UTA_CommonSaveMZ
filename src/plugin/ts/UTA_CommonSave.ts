@@ -567,7 +567,7 @@ namespace utakata {
     DataManager.saveGame = function (savefileId: number): Promise<number> {
         return _DataManager_saveGame.call(this, savefileId).then((ret: number) => {
             // savefileId = 0 is auto save
-            // v1.0.1:
+            // RPGMakerMZ v1.0.1:
             // 一度タイトル画面に戻ってから「初めから」を選んだ場合に
             // 何故かオートセーブ処理が実行されてしまい共有セーブが初期状態で上書きされてしまう
             // この現象を回避する為に明らかにゲームスタート直後の場合は共有セーブしないようにする
