@@ -1,5 +1,5 @@
 //=============================================================================
-// UTA_CommonSave.js
+// UTA_CommonSaveMZ.js
 //=============================================================================
 /*:ja
  * @target MZ
@@ -96,7 +96,7 @@
  * local版ではsaveディレクトリ以下に共有セーブデータファイルが作成されます。
  * web版ではLocalStorageに共有セーブデータが保存されます。
  *
- * ■プラグインパラメーター
+ * ■プラグインパラメータ
  *   ・共有対象スイッチ番号
  *     セーブデータ間で共有するスイッチ番号の定義です。
  *     複数設定する事ができます。
@@ -200,7 +200,7 @@ var utakata;
             this.targetSwitches = [];
             this.targetVariables = [];
             this.parameters = PluginManager.parameters(this.PLUGIN_NAME);
-            // プラグインパラメーターに指定された値を読み込む
+            // プラグインパラメータに指定された値を読み込む
             var targetSwitchesList = JsonEx.parse(this.parameters.targetSwitches);
             var targetVariablesList = JsonEx.parse(this.parameters.targetVariables);
             this.loadTargetSwitchesNumber(targetSwitchesList);
@@ -229,7 +229,7 @@ var utakata;
          * 共有対象スイッチ番号を読み込む。
          * @static
          * @param {string[]} targetSwitches 読み込み対象のスイッチ番号文字配列。
-         * プラグインパラメーターに設定された配列を渡す。
+         * プラグインパラメータに設定された配列を渡す。
          */
         CommonSave.loadTargetSwitchesNumber = function (targetSwitches) {
             this.targetSwitches = this.loadTargetCoreNumber(targetSwitches);
@@ -238,7 +238,7 @@ var utakata;
          * 共有対象変数番号を読み込む。
          * @static
          * @param {string[]} targetVariables 読み込み対象の変数番号文字配列。
-         * プラグインパラメーター似設定された配列を渡す。
+         * プラグインパラメータ似設定された配列を渡す。
          */
         CommonSave.loadTargetVariablesNumber = function (targetVariables) {
             this.targetVariables = this.loadTargetCoreNumber(targetVariables);
@@ -348,7 +348,7 @@ var utakata;
             return contents;
         };
         /**
-         * プラグインパラメーターで設定された共有セーブデータファイル名を取得する。
+         * プラグインパラメータで設定された共有セーブデータファイル名を取得する。
          * 拡張子は含めない。
          * @static
          * @return {string} 共有セーブデータファイル名の文字列。
@@ -526,7 +526,7 @@ var utakata;
          * プラグイン名称定義
          * @type {string}
          */
-        CommonSave.PLUGIN_NAME = "UTA_CommonSave";
+        CommonSave.PLUGIN_NAME = "UTA_CommonSaveMZ";
         /**
          * プラグインのバージョン定義
          * @type {object}
