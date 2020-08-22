@@ -96,7 +96,7 @@
  * local版ではsaveディレクトリ以下に共有セーブデータファイルが作成されます。
  * web版ではLocalStorageに共有セーブデータが保存されます。
  *
- * ■プラグインパラメーター
+ * ■プラグインパラメータ
  *   ・共有対象スイッチ番号
  *     セーブデータ間で共有するスイッチ番号の定義です。
  *     複数設定する事ができます。
@@ -237,7 +237,7 @@ namespace utakata {
          */
         private static targetVariables: number[] = [];
         /**
-         * プラグインパラメーターの参照
+         * プラグインパラメータの参照
          * @type {object}
          */
         private static parameters: CommonSavePluginParameters;
@@ -255,7 +255,7 @@ namespace utakata {
             this.targetVariables = [];
             this.parameters = <CommonSavePluginParameters>PluginManager.parameters(this.PLUGIN_NAME);
 
-            // プラグインパラメーターに指定された値を読み込む
+            // プラグインパラメータに指定された値を読み込む
             var targetSwitchesList: string[] = JsonEx.parse(this.parameters.targetSwitches);
             var targetVariablesList: string[] = JsonEx.parse(this.parameters.targetVariables);
             this.loadTargetSwitchesNumber(targetSwitchesList);
@@ -285,7 +285,7 @@ namespace utakata {
          * 共有対象スイッチ番号を読み込む。
          * @static
          * @param {string[]} targetSwitches 読み込み対象のスイッチ番号文字配列。
-         * プラグインパラメーターに設定された配列を渡す。
+         * プラグインパラメータに設定された配列を渡す。
          */
         private static loadTargetSwitchesNumber(targetSwitches: string[]): void {
             this.targetSwitches = this.loadTargetCoreNumber(targetSwitches);
@@ -295,7 +295,7 @@ namespace utakata {
          * 共有対象変数番号を読み込む。
          * @static
          * @param {string[]} targetVariables 読み込み対象の変数番号文字配列。
-         * プラグインパラメーター似設定された配列を渡す。
+         * プラグインパラメータ似設定された配列を渡す。
          */
         private static loadTargetVariablesNumber(targetVariables: string[]): void {
             this.targetVariables = this.loadTargetCoreNumber(targetVariables);
@@ -405,7 +405,7 @@ namespace utakata {
         }
 
         /**
-         * プラグインパラメーターで設定された共有セーブデータファイル名を取得する。
+         * プラグインパラメータで設定された共有セーブデータファイル名を取得する。
          * 拡張子は含めない。
          * @static
          * @return {string} 共有セーブデータファイル名の文字列。
