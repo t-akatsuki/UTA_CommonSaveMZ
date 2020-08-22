@@ -1,5 +1,5 @@
 //=============================================================================
-// UTA_CommonSave.js
+// UTA_CommonSaveMZ.js
 //=============================================================================
 /*:ja
  * @target MZ
@@ -216,7 +216,7 @@ namespace utakata {
          * プラグイン名称定義
          * @type {string}
          */
-        public static readonly PLUGIN_NAME: string = "UTA_CommonSave";
+        public static readonly PLUGIN_NAME: string = "UTA_CommonSaveMZ";
         /**
          * プラグインのバージョン定義
          * @type {object}
