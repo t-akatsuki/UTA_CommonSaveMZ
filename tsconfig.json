@@ -12,7 +12,7 @@
         "noImplicitReturns": true,
         "noImplicitAny": true,
         "noEmitOnError": true,
-        "strict": true,
+        "strict": false,
         "lib": [
             "es5",
             "ES2015.Promise"
