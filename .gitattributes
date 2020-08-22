@@ -1,0 +1,9 @@
+# git archive ignore targets
+.gitignore      export-ignore
+.gitattributes  export-ignore
+.gitkeep        export-ignore
+.vscode         export-ignore
+
+# README.txtはWindowsメモ帳で参照される可能性が高い為、
+# 改行コードをcrlfとする
+README.txt      text eol=crlf
