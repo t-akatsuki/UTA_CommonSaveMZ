@@ -26,7 +26,7 @@
     "clean:plugin": "rimraf ./dest/plugin/*",
     "clean:deploy": "rimraf ./deploy/*",
     "preparation": "npm-run-all clean build:release copy:readme:dest copy:license:dest",
-    "deploy": "cross-var git archive HEAD:dest --format=zip --output=${npm_package_config_deploy_dir}/${npm_package_version}.zip"
+    "deploy": "cross-var git archive HEAD:dest --worktree-attributes --format=zip --output=${npm_package_config_deploy_dir}/${npm_package_config_plugin_name}_${npm_package_version}.zip"
   },
   "repository": {
     "type": "git",
