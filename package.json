@@ -10,12 +10,14 @@
     "test_plugin_dir": "./test/js/plugins"
   },
   "scripts": {
-    "build:debug": "npm-run-all lint:check tsc:debug copy:plugin:test",
+    "build:debug": "npm-run-all lint:check tsc copy:plugin:test",
+    "build:release": "npm-run-all clean lint:check tsc copy:plugin:test",
     "lint:check": "cross-var eslint --config .eslintrc.json ${npm_package_config_src_plugin_dir}",
     "lint:fix": "cross-var eslint --config .eslintrc.json --fix ${npm_package_config_src_plugin_dir}",
-    "tsc:debug": "cross-var tsc --project tsconfig.json ",
+    "tsc": "cross-var tsc --project tsconfig.json ",
     "copy:plugin:test": "cross-var cpx \"${npm_package_config_dest_plugin_dir}/*.js\" ${npm_package_config_test_plugin_dir}/",
-    "clean": "cross-var rimraf '${npm_package_config_dest_plugin_dir}/*'"
+    "clean": "npm-run-all clean:plugin",
+    "clean:plugin": "rimraf ./dest/plugin/*"
   },
   "repository": {
     "type": "git",
