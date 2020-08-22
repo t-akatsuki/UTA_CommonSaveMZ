@@ -7,18 +7,25 @@
   "config": {
     "plugin_name": "UTA_CommonSaveMZ",
     "src_plugin_dir": "./src/plugin",
+    "dest_dir": "./dest",
     "dest_plugin_dir": "./dest/plugin",
-    "test_plugin_dir": "./test/js/plugins"
+    "test_plugin_dir": "./test/js/plugins",
+    "deploy_dir": "./deploy"
   },
   "scripts": {
     "build:debug": "npm-run-all lint:check tsc copy:plugin:test",
-    "build:release": "npm-run-all clean lint:check tsc copy:plugin:test",
+    "build:release": "npm-run-all clean:plugin lint:check tsc copy:plugin:test",
     "lint:check": "cross-var eslint --config .eslintrc.json ${npm_package_config_src_plugin_dir}",
     "lint:fix": "cross-var eslint --config .eslintrc.json --fix ${npm_package_config_src_plugin_dir}",
     "tsc": "cross-var tsc --project tsconfig.json ",
     "copy:plugin:test": "cross-var cpx \"${npm_package_config_dest_plugin_dir}/*.js\" ${npm_package_config_test_plugin_dir}/",
-    "clean": "npm-run-all clean:plugin",
-    "clean:plugin": "rimraf ./dest/plugin/*"
+    "copy:readme:dest": "cpx ./src/README.txt ${npm_package_config_dest_dir}",
+    "copy:license:dest": "cpx ./LICENSE ${npm_package_config_dest_dir}",
+    "clean": "npm-run-all clean:dest clean:plugin",
+    "clean:dest": "rimraf ./dest/README.txt ./dest/LICENSE",
+    "clean:plugin": "rimraf ./dest/plugin/*",
+    "preparation": "npm-run-all clean build:release copy:readme:dest copy:license:dest",
+    "deploy": "cross-var git archive HEAD:dest --format=zip --output=${npm_package_config_deploy_dir}/${npm_package_version}.zip"
   },
   "repository": {
     "type": "git",
