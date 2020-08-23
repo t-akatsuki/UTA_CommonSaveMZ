@@ -66,9 +66,9 @@ MIT Licenseの全文もしくは全文を掲載したWebページのURLを、ソースコードの中や、
 #------------------------------------------------------------------------------
 # 連絡先
 #------------------------------------------------------------------------------
-┌─────┬────────────────────────┐
-│ Author   │ 赤月 智平(t-akatsuki)                          │
-│ WebSite  │ www.utakata-no-yume.net                        │
-│ GitHub   │ https://github.com/t-akatsuki                  │
-│ Twitter  │ [@T_Akatsuki](https://twitter.com/t_akatsuki)  │
-└─────┴────────────────────────┘
++----------+------------------------------------------------+
+| Author   | 赤月 智平(t-akatsuki)                          |
+| WebSite  | www.utakata-no-yume.net                        |
+| GitHub   | https://github.com/t-akatsuki                  |
+| Twitter  | [@T_Akatsuki](https://twitter.com/t_akatsuki)  |
++----------+------------------------------------------------+
