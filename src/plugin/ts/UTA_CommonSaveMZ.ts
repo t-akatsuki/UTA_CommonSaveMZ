@@ -167,12 +167,12 @@
  *   最終更新日 : 2020.08.22
  *   制作者     : 赤月 智平(t-akatsuki)
  *   Webサイト  : https://www.utakata-no-yume.net
- *   GitHub     : https://github.com/t-akatsuki/RMMZ_UTA_CommonSave
+ *   GitHub     : https://github.com/t-akatsuki
  *   Twitter    : https://twitter.com/T_Akatsuki
  *   ライセンス : MIT License
  *
  * ■更新履歴
- *   0.9.0 (2020/08/22)
+ *   0.9.0 (2020.08.22)
  *     β版。
  *     RPGツクールMV用UTA_CommonSaveをベースにRPGツクールMZ用に移植。
  *     オートセーブ機能への対応。
