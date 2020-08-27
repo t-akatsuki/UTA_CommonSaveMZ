@@ -177,7 +177,7 @@
  * # Changelog
  * ## 0.9.0 (2020.08.22)
  *   Beta version.
- *   Remake for RPGMakerMV based on UTA_CommonSave plugin for RPGMakerMV.
+ *   Remake for RPG Maker MV based on UTA_CommonSave plugin for RPG Maker MV.
  *   Supports auto-save function.
  */
 /*:ja
