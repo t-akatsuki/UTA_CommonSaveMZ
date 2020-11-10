@@ -19,13 +19,14 @@
     "lint:fix": "cross-var eslint --config .eslintrc.json --fix ${npm_package_config_src_plugin_dir}",
     "tsc": "cross-var tsc --project tsconfig.json ",
     "copy:plugin:test": "cross-var cpx \"${npm_package_config_dest_plugin_dir}/*.js\" ${npm_package_config_test_plugin_dir}/",
-    "copy:readme:dest": "cpx ./src/README.txt ${npm_package_config_dest_dir}",
+    "copy:readme_jp:dest": "cpx ./src/README_JP.txt ./dest/",
+    "copy:readme_en:dest": "cpx ./src/README_EN.txt ./dest/",
     "copy:license:dest": "cpx ./LICENSE ${npm_package_config_dest_dir}",
     "clean": "npm-run-all clean:dest clean:plugin clean:deploy",
     "clean:dest": "rimraf ./dest/README.txt ./dest/LICENSE",
     "clean:plugin": "rimraf ./dest/plugin/*",
     "clean:deploy": "rimraf ./deploy/*",
-    "preparation": "npm-run-all clean build:release copy:readme:dest copy:license:dest",
+    "preparation": "npm-run-all clean build:release copy:readme_jp:dest copy:readme_en:dest copy:license:dest",
     "deploy": "cross-var git archive HEAD:dest --worktree-attributes --format=zip --output=${npm_package_config_deploy_dir}/${npm_package_config_plugin_name}_${npm_package_version}.zip"
   },
   "repository": {
