@@ -12,14 +12,14 @@
  * @text Share target switches
  * @desc Set target switches number you want make shared.
  * Using "-", the range can be specified.
- * @default
+ * @default []
  * @type string[]
  *
  * @param targetVariables
  * @text Share target variables
  * @desc Set target variables number you want make shared.
  * Using "-", the range can be specified.
- * @default
+ * @default []
  * @type string[]
  *
  * @param applyOnLoad
@@ -166,8 +166,8 @@
  *    This command for test.
  *
  * # Plugin Informations
- * Version      : 0.9.0
- * Last Updated : 2020.08.22
+ * Version      : 0.9.1
+ * Last Updated : 2020/11/11
  * Author       : t-akatsuki
  * Web Site     : https://www.utakata-no-yume.net
  * GitHub       : https://github.com/t-akatsuki
@@ -175,9 +175,14 @@
  * License      : MIT License
  *
  * # Changelog
- * ## 0.9.0 (2020.08.22)
+ * ## 0.9.1 (2020/11/11)
+ *   Fixed a bug that it doesn't work when the plugin parameter
+ *   "Share target switches" or "Share target variables" is not specified.
+ *   Added English annotation and README_EN.txt.
+ *
+ * ## 0.9.0 (2020/08/22)
  *   Beta version.
- *   Remake for RPGMakerMV based on UTA_CommonSave plugin for RPGMakerMV.
+ *   Remake for RPG Maker MV based on UTA_CommonSave plugin for RPG Maker MV.
  *   Supports auto-save function.
  */
 /*:ja
@@ -192,14 +197,14 @@
  * @text 共有対象スイッチ番号
  * @desc セーブデータ間で共有するスイッチ番号の定義です。
  * 「-」で範囲指定が可能です。
- * @default
+ * @default []
  * @type string[]
  *
  * @param targetVariables
  * @text 共有対象変数番号
  * @desc セーブデータ間で共有する変数番号の定義です。
  * 「-」で範囲指定が可能です。
- * @default
+ * @default []
  * @type string[]
  *
  * @param applyOnLoad
@@ -342,8 +347,8 @@
  *    動作確認用のプラグインコマンドです。
  *
  * # プラグインの情報
- * バージョン : 0.9.0
- * 最終更新日 : 2020.08.22
+ * バージョン : 0.9.1
+ * 最終更新日 : 2020/11/11
  * 制作者     : 赤月 智平(t-akatsuki)
  * Webサイト  : https://www.utakata-no-yume.net
  * GitHub     : https://github.com/t-akatsuki
@@ -351,7 +356,12 @@
  * ライセンス : MIT License
  *
  * # 更新履歴
- * ## 0.9.0 (2020.08.22)
+ * ## 0.9.1 (2020/11/11)
+ *   プラグインパラメータ「共有対象スイッチ番号」もしくは「共有対象変数番号」を
+ *   指定していないと正常動作しない不具合の修正。
+ *   英語版アノテーション, README_EN.txtの追加。
+ *
+ * ## 0.9.0 (2020/08/22)
  *   β版。
  *   RPGツクールMV用UTA_CommonSaveをベースにRPGツクールMZ用に移植。
  *   オートセーブ機能への対応。
@@ -380,10 +390,15 @@ var utakata;
             this.targetVariables = [];
             this.parameters = PluginManager.parameters(this.PLUGIN_NAME);
             // プラグインパラメータに指定された値を読み込む
-            var targetSwitchesList = JsonEx.parse(this.parameters.targetSwitches);
-            var targetVariablesList = JsonEx.parse(this.parameters.targetVariables);
-            this.loadTargetSwitchesNumber(targetSwitchesList);
-            this.loadTargetVariablesNumber(targetVariablesList);
+            try {
+                var targetSwitchesList = this.parameters.targetSwitches ? JsonEx.parse(this.parameters.targetSwitches) : [];
+                var targetVariablesList = this.parameters.targetVariables ? JsonEx.parse(this.parameters.targetVariables) : [];
+                this.loadTargetSwitchesNumber(targetSwitchesList);
+                this.loadTargetVariablesNumber(targetVariablesList);
+            }
+            catch (e) {
+                throw new Error(this.PLUGIN_NAME + ": plugin parameter parse error: " + e.message);
+            }
         };
         /**
          * 文字列配列から対象番号配列をロードする。
@@ -713,7 +728,7 @@ var utakata;
         CommonSave.PLUGIN_VERSION = {
             major: 0,
             minor: 9,
-            release: 0
+            release: 1
         };
         /**
          * 共有対象のスイッチ番号定義
