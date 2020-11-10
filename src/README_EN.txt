@@ -1,9 +1,9 @@
-#=============================================================================#
-# UTA_CommonSaveMZ Plugin                                                     #
-#=============================================================================#
-#-----------------------------------------------------------------------------#
-# Overview                                                                    #
-#-----------------------------------------------------------------------------#
+#==============================================================================
+# UTA_CommonSaveMZ Plugin
+#==============================================================================
+#------------------------------------------------------------------------------
+# Overview
+#------------------------------------------------------------------------------
 UTA_CommonSaveMZ plugin creates shared save data and shares the state of 
 the specified switches/variables between game save data.
 You can have it applied automatically at the time of save/load
@@ -31,9 +31,9 @@ Please use the following plugin if you want to use it in RPG Maker MV.
 
 * https://github.com/t-akatsuki/UTA_CommonSaveMV
 
-#-----------------------------------------------------------------------------#
-# How to use                                                                  #
-#-----------------------------------------------------------------------------#
+#------------------------------------------------------------------------------
+# How to use
+#------------------------------------------------------------------------------
 Copy "UTA_CommonSaveMZ.js" to your project, enable the plugin.
 And please add the specify the switches and variables to be shared 
 in plugin parameters.
@@ -45,9 +45,9 @@ You can use shared save data at any time by using the plugin command.
 
 Please refer to the plugin's help for detailed information.
 
-#-----------------------------------------------------------------------------#
-# Changelog                                                                   #
-#-----------------------------------------------------------------------------#
+#------------------------------------------------------------------------------
+# Changelog
+#------------------------------------------------------------------------------
  * 0.9.0 (2020.08.22)
  Beta version.
  Remake for RPG Maker MV based on UTA_CommonSave plugin for RPG Maker MV.
@@ -76,7 +76,7 @@ Even if any problem occurs by using these software, the author is not responsibl
 #------------------------------------------------------------------------------
 +----------+------------------------------------------------+
 | Author   | t-akatsuki                                     |
-| WebSite  | www.utakata-no-yume.net                        |
+| WebSite  | https://www.utakata-no-yume.net                |
 | GitHub   | https://github.com/t-akatsuki                  |
-| Twitter  | [@T_Akatsuki](https://twitter.com/t_akatsuki)  |
+| Twitter  | https://twitter.com/t_akatsuki                 |
 +----------+------------------------------------------------+
