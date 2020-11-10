@@ -6,4 +6,4 @@
 
 # README.txtはWindowsメモ帳で参照される可能性が高い為、
 # 改行コードをcrlfとする
-README.txt      text eol=crlf
+README*.txt      text eol=crlf
