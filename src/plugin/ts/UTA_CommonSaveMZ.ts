@@ -13,14 +13,14 @@
  * @text 共有対象スイッチ番号
  * @desc セーブデータ間で共有するスイッチ番号の定義です。
  * 「-」で範囲指定が可能です。
- * @default
+ * @default []
  * @type string[]
  *
  * @param targetVariables
  * @text 共有対象変数番号
  * @desc セーブデータ間で共有する変数番号の定義です。
  * 「-」で範囲指定が可能です。
- * @default
+ * @default []
  * @type string[]
  *
  * @param applyOnLoad
@@ -256,10 +256,14 @@ namespace utakata {
             this.parameters = <CommonSavePluginParameters>PluginManager.parameters(this.PLUGIN_NAME);
 
             // プラグインパラメータに指定された値を読み込む
-            var targetSwitchesList: string[] = JsonEx.parse(this.parameters.targetSwitches);
-            var targetVariablesList: string[] = JsonEx.parse(this.parameters.targetVariables);
-            this.loadTargetSwitchesNumber(targetSwitchesList);
-            this.loadTargetVariablesNumber(targetVariablesList);
+            try {
+                var targetSwitchesList: string[] = this.parameters.targetSwitches ? JsonEx.parse(this.parameters.targetSwitches) : [];
+                var targetVariablesList: string[] = this.parameters.targetVariables ? JsonEx.parse(this.parameters.targetVariables) : [];
+                this.loadTargetSwitchesNumber(targetSwitchesList);
+                this.loadTargetVariablesNumber(targetVariablesList);
+            } catch (e) {
+                throw new Error(this.PLUGIN_NAME + ": plugin parameter parse error: " + e.message);
+            }
         }
 
         /**
