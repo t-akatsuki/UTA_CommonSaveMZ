@@ -56,6 +56,6 @@ RPGツクールMV用UTA_CommonSaveをベースにRPGツクールMZ用に移植�
 |  |  |
 |:---:|:---|
 | Author | 赤月 智平(t-akatsuki) |
-| WebSite | www.utakata-no-yume.net |
+| WebSite | https://www.utakata-no-yume.net |
 | GitHub | https://github.com/t-akatsuki |
 | Twitter | [@T_Akatsuki](https://twitter.com/t_akatsuki) |
