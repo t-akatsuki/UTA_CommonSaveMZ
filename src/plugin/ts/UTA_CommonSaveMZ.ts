@@ -12,14 +12,14 @@
  * @text Share target switches
  * @desc Set target switches number you want make shared.
  * Using "-", the range can be specified.
- * @default
+ * @default []
  * @type string[]
  *
  * @param targetVariables
  * @text Share target variables
  * @desc Set target variables number you want make shared.
  * Using "-", the range can be specified.
- * @default
+ * @default []
  * @type string[]
  *
  * @param applyOnLoad
