@@ -48,10 +48,15 @@ Please refer to the plugin's help for detailed information.
 #------------------------------------------------------------------------------
 # Changelog
 #------------------------------------------------------------------------------
- * 0.9.0 (2020.08.22)
- Beta version.
- Remake for RPG Maker MV based on UTA_CommonSave plugin for RPG Maker MV.
- Supports auto-save function.
+* 0.9.1 (2020/11/11)
+Fixed a bug that it doesn't work when the plugin parameter 
+"Share target switches" or "Share target variables" is not specified.
+Added English annotation and README_EN.txt.
+
+* 0.9.0 (2020/08/22)
+Beta version.
+Remake for RPG Maker MV based on UTA_CommonSave plugin for RPG Maker MV.
+Supports auto-save function.
 
 #------------------------------------------------------------------------------
 # License
