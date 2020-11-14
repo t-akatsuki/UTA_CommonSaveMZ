@@ -61,6 +61,7 @@
     "pixi.js": "5.2.4",
     "prettier": "^2.0.5",
     "rimraf": "^3.0.2",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.7",
+    "braces": ">=2.3.1"
   }
 }
