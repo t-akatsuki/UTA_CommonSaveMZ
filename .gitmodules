@@ -1,0 +1,8 @@
+[submodule "lib/utakata-rmmz-ts-lib"]
+    path = lib/utakata-rmmz-ts-lib
+    url = https://github.com/t-akatsuki/utakata-rmmz-ts-lib.git
+    branch = develop/4.7.4
+[submodule "types/utakata-rmmz-d.ts"]
+    path = types/utakata-rmmz-d.ts
+    url = https://github.com/t-akatsuki/utakata-rmmz-d.ts.git
+    branch = develop/v1.5.0
