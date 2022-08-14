@@ -1,0 +1,19 @@
+// https://code.visualstudio.com/docs/remote/devcontainerjson-reference
+{
+    "name": "UTA_CommonSaveMZ",
+    "build": {
+        "dockerfile": "./Dockerfile",
+        "context": "."
+    },
+    "forwardPorts": [],
+    "mounts": [
+        "source=${localWorkspaceFolder},target=/usr/local/work,type=bind"
+    ],
+    "workspaceFolder": "/usr/local/work",
+    "overrideCommand": true,
+    "remoteUser": "root",
+    "shutdownAction": "stopContainer",
+    "extensions": [
+        "christian-kohler.npm-intellisense"
+    ]
+}
