@@ -1,67 +1,53 @@
 {
   "name": "uta_commonsavemz",
-  "version": "0.9.1",
-  "description": "",
+  "version": "1.0.0",
+  "description": "RPGツクールMZ用「共有セーブデータ」プラグインです。",
   "main": "",
-  "directories": {},
   "config": {
-    "plugin_name": "UTA_CommonSaveMZ",
-    "src_plugin_dir": "./src/plugin",
-    "dest_dir": "./dest",
-    "dest_plugin_dir": "./dest/plugin",
-    "test_plugin_dir": "./test/js/plugins",
-    "deploy_dir": "./deploy"
+    "PLUGIN_NAME": "UTA_CommonSaveMZ",
+    "PLUGIN_VERSION": "v1.0.0",
+    "DEST_PLUGIN_FILE": "./dest/UTA_CommonSaveMZ.js",
+    "ANNOTATION_FILE": "./src/plugin/plugin-annotation.js"
   },
+  "directories": {},
   "scripts": {
-    "build:debug": "npm-run-all lint:check tsc copy:plugin:test",
-    "build:release": "npm-run-all clean:plugin lint:check tsc copy:plugin:test",
-    "lint:check": "cross-var eslint --config .eslintrc.json ${npm_package_config_src_plugin_dir}",
-    "lint:fix": "cross-var eslint --config .eslintrc.json --fix ${npm_package_config_src_plugin_dir}",
-    "tsc": "cross-var tsc --project tsconfig.json ",
-    "copy:plugin:test": "cross-var cpx \"${npm_package_config_dest_plugin_dir}/*.js\" ${npm_package_config_test_plugin_dir}/",
-    "copy:readme_jp:dest": "cpx ./src/README_JP.txt ./dest/",
-    "copy:readme_en:dest": "cpx ./src/README_EN.txt ./dest/",
-    "copy:license:dest": "cpx ./LICENSE ${npm_package_config_dest_dir}",
-    "clean": "npm-run-all clean:dest clean:plugin clean:deploy",
-    "clean:dest": "rimraf ./dest/README.txt ./dest/LICENSE",
-    "clean:plugin": "rimraf ./dest/plugin/*",
-    "clean:deploy": "rimraf ./deploy/*",
-    "preparation": "npm-run-all clean build:release copy:readme_jp:dest copy:readme_en:dest copy:license:dest",
-    "deploy": "cross-var git archive HEAD:dest --worktree-attributes --format=zip --output=${npm_package_config_deploy_dir}/${npm_package_config_plugin_name}_${npm_package_version}.zip"
+    "clean:dest": "rimraf dest/*",
+    "clean:dist": "rimraf dist/*",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/t-akatsuki/RMMZ_UTA_CommonSave.git"
+    "url": "git+https://github.com/t-akatsuki/UTA_CommonSaveMZ.git"
   },
   "keywords": [
-    "rpgmz",
-    "rpgmakermz",
-    "rpgtkoolmz",
+    "RPGツクール",
+    "RPGツクールMZ",
     "rpgmaker",
-    "rpgtkool"
+    "rpgmakermz"
   ],
   "author": "t-akatsuki",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/t-akatsuki/RMMZ_UTA_CommonSave/issues"
+    "url": "https://github.com/t-akatsuki/UTA_CommonSaveMZ/issues"
   },
-  "homepage": "https://github.com/t-akatsuki/RMMZ_UTA_CommonSave#readme",
+  "homepage": "https://www.utakata-no-yume.net",
   "devDependencies": {
-    "@types/node": "13.11.0",
-    "@types/pako": "^1.0.1",
-    "@typescript-eslint/eslint-plugin": "^3.9.1",
-    "@typescript-eslint/parser": "^3.9.1",
-    "cpx": "^1.5.0",
-    "cross-var": "^1.1.0",
-    "eslint": "^7.7.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "localforage": "^1.9.0",
+    "@microsoft/tsdoc": "^0.14.1",
+    "@types/node": "14.14.0",
+    "@types/nw.js": "^0.13.15",
+    "@typescript-eslint/eslint-plugin": "^5.33.0",
+    "@typescript-eslint/parser": "^5.33.0",
+    "@typescript/lib-dom": "file:lib/utakata-rmmz-ts-lib",
+    "concat": "^1.0.3",
+    "cross-conf-env": "^1.3.0",
+    "eslint": "^8.22.0",
+    "eslint-config-prettier": "^8.5.0",
+    "javascript-obfuscator": "^4.0.0",
+    "npm-check-updates": "^16.0.5",
     "npm-run-all": "^4.1.5",
     "pixi.js": "5.2.4",
-    "prettier": "^2.0.5",
+    "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
-    "typescript": "^3.9.7",
-    "braces": ">=2.3.1"
+    "typescript": "^4.7.4"
   }
 }
