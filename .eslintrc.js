@@ -86,6 +86,8 @@
                 "types": "always",
                 "lib": "always"
             }
-        ]
+        ],
+        // コアスクリプトのメソッドのオーバーライド時にエラーとなるのでオフ
+        "@typescript-eslint/unbound-method": "off"
     }
 };
