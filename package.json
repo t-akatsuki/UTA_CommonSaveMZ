@@ -13,7 +13,19 @@
   "scripts": {
     "clean:dest": "rimraf dest/*",
     "clean:dist": "rimraf dist/*",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint src/plugin/*.ts --config=.eslintrc.js",
+    "lint:fix": "eslint src/plugin/*.ts --config=.eslintrc.js --fix",
+    "tsc:debug": "cross-conf-env tsc -p tsconfig.json --outFile npm_package_config_DEST_PLUGIN_FILE",
+    "tsc:release": "cross-conf-env tsc -p tsconfig.json --outFile npm_package_config_DEST_PLUGIN_FILE",
+    "concat:plugin-annotation": "cross-conf-env concat -o npm_package_config_DEST_PLUGIN_FILE npm_package_config_ANNOTATION_FILE npm_package_config_DEST_PLUGIN_FILE",
+    "apply-plugin-to-project": "cross-conf-env bash ./tools/apply-plugin-to-project.sh npm_package_config_DEST_PLUGIN_FILE",
+    "build:debug": "run-s clean:dest lint tsc:debug concat:plugin-annotation apply-plugin-to-project",
+    "build:release": "run-s clean:dest lint tsc:release concat:plugin-annotation apply-plugin-to-project",
+    "copy:docs": "cp -f ./src/docs/* ./dist/",
+    "copy:manual": "mkdir -p ./dist/manual && cp -rf ./manual/* ./dist/manual/",
+    "copy:plugin": "mkdir -p ./dist/plugin/ && cross-conf-env cp -f npm_package_config_DEST_PLUGIN_FILE ./dist/plugin/",
+    "preparation": "run-s clean:dist build:release copy:docs copy:manual copy:plugin",
+    "make:package": "cross-conf-env bash ./tools/make-package.sh npm_package_config_PLUGIN_NAME_npm_package_config_PLUGIN_VERSION.zip"
   },
   "repository": {
     "type": "git",
