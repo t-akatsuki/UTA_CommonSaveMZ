@@ -69,7 +69,6 @@ namespace utakata {
 
         /**
          * 初期化処理
-         * @static
          */
         public static initialize(): void {
             this.targetSwitches = [];
@@ -78,12 +77,14 @@ namespace utakata {
 
             // プラグインパラメータに指定された値を読み込む
             try {
-                var targetSwitchesList: string[] = this.parameters.targetSwitches ? JsonEx.parse(this.parameters.targetSwitches) : [];
-                var targetVariablesList: string[] = this.parameters.targetVariables ? JsonEx.parse(this.parameters.targetVariables) : [];
+                const targetSwitchesList: string[] = this.parameters.targetSwitches ? <Array<string>>JsonEx.parse(this.parameters.targetSwitches) : [];
+                const targetVariablesList: string[] = this.parameters.targetVariables ? <Array<string>>JsonEx.parse(this.parameters.targetVariables) : [];
                 this.loadTargetSwitchesNumber(targetSwitchesList);
                 this.loadTargetVariablesNumber(targetVariablesList);
             } catch (e) {
-                throw new Error(this.PLUGIN_NAME + ": plugin parameter parse error: " + e.message);
+                if (e instanceof Error) {
+                    throw new Error(this.PLUGIN_NAME + ": plugin parameter parse error: " + e.message);
+                }
             }
         }
 
@@ -94,7 +95,7 @@ namespace utakata {
          * @return {number[]} 対象番号配列。
          */
         private static loadTargetCoreNumber(targetList: string[]): number[] {
-            var ret: number[] = [];
+            let ret: number[] = [];
             for (const targetStr of targetList) {
                 const targetList = this.parseTargetNumber(targetStr);
                 Array.prototype.push.apply(ret, targetList);
@@ -108,7 +109,6 @@ namespace utakata {
 
         /**
          * 共有対象スイッチ番号を読み込む。
-         * @static
          * @param {string[]} targetSwitches 読み込み対象のスイッチ番号文字配列。
          * プラグインパラメータに設定された配列を渡す。
          */
@@ -129,12 +129,11 @@ namespace utakata {
         /**
          * 引数で渡した数字文字列をparseして対象番号のリストを得る。
          * 「-]を利用して範囲指定された番号の解釈も行う。
-         * @static
          * @param {string} targetStr parse対象の文字列。
          * @return {number[]} 文字列から得た対象番号のリスト。
          */
         private static parseTargetNumber(targetStr: string): number[] {
-            var ret: number[] = [];
+            const ret: number[] = [];
             const emptyPattern = /^$/;
             const singlePattern = /^[0-9]+$/;
             const regionPattern = /^[0-9]+-[0-9]+$/;
@@ -172,8 +171,10 @@ namespace utakata {
                 }
             } catch (e) {
                 console.error("CommonSave.parseTargetNumber: Invalid format string has comming. (" + targetStr + ")");
-                console.error(e.message);
-                console.error(e.stack);
+                if (e instanceof Error) {
+                    console.error(e.message);
+                    console.error(e.stack);
+                }
                 throw e;
             }
             return ret;
@@ -181,15 +182,14 @@ namespace utakata {
 
         /**
          * 現在の$gameSwitchesのデータから、共有セーブ対象としているものを連想配列で取得する。
-         * @static
          * @return {object} 共有セーブ対象$gameSwitchesの連想配列。
          */
         private static makeTargetGameSwitchesJson(): { [idx: number]: boolean } {
-            var ret: { [idx: number]: boolean } = {};
+            const ret: { [idx: number]: boolean } = {};
             for (const idx of this.targetSwitches) {
                 // $gameSwitchesは触った事が無いと要素が作られないので範囲チェックできない
                 if (idx < 1) {
-                    console.warn("ComonSave.getTargetSwitchesJson: target switch index is out of range. (" + idx + ")");
+                    console.warn(`ComonSave.getTargetSwitchesJson: target switch index is out of range. (${idx})`);
                     continue;
                 }
                 ret[idx] = $gameSwitches.value(idx);
@@ -199,15 +199,14 @@ namespace utakata {
 
         /**
          * 現在の$gameVariablesのデータから、共有セーブの対象としているものを連想配列で取得する。
-         * @static
          * @return {object} 共有セーブ対象$gameVariablesの連想配列。
          */
         private static makeTargetGameVariablesJson(): { [idx: number]: number } {
-            var ret: { [idx: number]: number } = {};
+            const ret: { [idx: number]: number } = {};
             for (const idx of this.targetVariables) {
                 // $gameVariablesは触った事が無いと要素が作られないので範囲チェックできない
                 if (idx < 1) {
-                    console.warn("ComonSave.getTargetGameVariablesJson: target variable index is out of range. (" + idx + ")");
+                    console.warn(`ComonSave.getTargetGameVariablesJson: target variable index is out of range. (${idx})`);
                     continue;
                 }
                 ret[idx] = $gameVariables.value(idx);
@@ -217,7 +216,6 @@ namespace utakata {
 
         /**
          * 共有セーブするデータを作成する。
-         * @static
          * @return {object} 共有セーブするデータの連想配列。
          */
         private static makeSaveContents(): CommonSaveData {
@@ -232,7 +230,6 @@ namespace utakata {
         /**
          * プラグインパラメータで設定された共有セーブデータファイル名を取得する。
          * 拡張子は含めない。
-         * @static
          * @return {string} 共有セーブデータファイル名の文字列。
          */
         private static makeSaveName(): string {
@@ -241,7 +238,6 @@ namespace utakata {
 
         /**
          * 共有セーブデータが存在するか。
-         * @static
          * @return {boolean} 共有セーブデータが存在する場合trueを返す。
          */
         private static exists(): boolean {
@@ -251,7 +247,6 @@ namespace utakata {
 
         /**
          * 共有セーブオブジェクトから$gameSwitchesにデータをロードする。
-         * @static
          * @param {object} contents ロードした共有セーブデータオブジェクト
          */
         private static loadCommonSaveSwitches(contents: CommonSaveData): void {
@@ -268,7 +263,6 @@ namespace utakata {
 
         /**
          * 共有セーブオブジェクトから$gameVariablesにデータをロードする。
-         * @static
          * @param {object} contents ロードした共有セーブデータオブジェクト
          */
         private static loadCommonSaveVariables(contents: CommonSaveData): void {
@@ -286,8 +280,6 @@ namespace utakata {
         /**
          * 共有セーブデータのロード処理。
          * local版, web版共通。
-         * @static
-         * @return {Promise<number>}
          */
         public static load(): Promise<number> {
             // 共有セーブデータが存在しない場合は何もしない
@@ -310,8 +302,6 @@ namespace utakata {
         /**
          * 共有セーブデータのセーブ処理。
          * local版, web版共通。
-         * @static
-         * @return {Promise<number>}
          */
         public static save(): Promise<number> {
             const contents = this.makeSaveContents();
@@ -324,7 +314,6 @@ namespace utakata {
 
         /**
          * 共有セーブデータを削除する。
-         * @static
          */
         public static remove(): void {
             const saveName = this.makeSaveName();
@@ -335,7 +324,6 @@ namespace utakata {
         /**
          * 現在共有対象としているスイッチ/変数番号をコンソールに表示する。
          * デバッグ用機能。
-         * @static
          */
         public static check(): void {
             console.info("CommonSave.check: current target switches number.");
@@ -346,7 +334,6 @@ namespace utakata {
 
         /**
          * セーブデータロード時に共有セーブデータをロードするか。
-         * @static
          * @return {boolean}
          */
         public static isApplyOnLoad(): boolean {
@@ -355,7 +342,6 @@ namespace utakata {
 
         /**
          * セーブデータセーブ時に共有セーブデータをセーブするか。
-         * @static
          * @return {boolean}
          */
         public static isApplyOnSave(): boolean {
@@ -364,7 +350,6 @@ namespace utakata {
 
         /**
          * オートセーブ時に共有セーブデータをセーブするか。
-         * @static
          * @return {boolean}
          */
         public static isApplyOnAutoSave(): boolean {
@@ -373,7 +358,6 @@ namespace utakata {
 
         /**
          * ニューゲーム時に共有セーブデータをロードするか。
-         * @static
          * @return {boolean}
          */
         public static isApplyOnNewGame(): boolean {
@@ -382,7 +366,6 @@ namespace utakata {
 
         /**
          * ゲームオーバー時に共有セーブデータをセーブするか。
-         * @static
          * @return {boolean}
          */
         public static isApplyOnGameover(): boolean {
@@ -395,7 +378,6 @@ namespace utakata {
          * 何故かオートセーブ処理が実行されてしまい共有セーブが初期状態で上書きされてしまう状態を
          * 回避する為の判定処理。
          * 対症療法である為、この処理はコアスクリプトの改修に合わせて修正する。
-         * @static
          * @return {boolean} 「初めから」即セーブの場合はtrueを返す。
          */
         public static checkNewGame(): boolean {
@@ -423,10 +405,10 @@ namespace utakata {
      * register plugin command
      */
     PluginManager.registerCommand(CommonSave.PLUGIN_NAME, "load", () => {
-        CommonSave.load();
+        void CommonSave.load();
     });
     PluginManager.registerCommand(CommonSave.PLUGIN_NAME, "save", () => {
-        CommonSave.save();
+        void CommonSave.save();
     });
     PluginManager.registerCommand(CommonSave.PLUGIN_NAME, "remove", () => {
         CommonSave.remove();
@@ -439,15 +421,15 @@ namespace utakata {
      * DataManager
      */
     const _DataManager_setupNewGame = DataManager.setupNewGame;
-    DataManager.setupNewGame = function (): void {
+    DataManager.setupNewGame = function(): void {
         _DataManager_setupNewGame.call(this);
         if (CommonSave.isApplyOnNewGame()) {
-            CommonSave.load();
+            void CommonSave.load();
         }
     };
 
     const _DataManager_saveGame = DataManager.saveGame;
-    DataManager.saveGame = function (savefileId: number): Promise<number> {
+    DataManager.saveGame = function(savefileId: number): Promise<number> {
         return _DataManager_saveGame.call(this, savefileId).then((ret: number) => {
             // savefileId = 0 is auto save
             // RPGMakerMZ v1.0.1:
@@ -469,7 +451,7 @@ namespace utakata {
     };
 
     const _DataManager_loadGame = DataManager.loadGame;
-    DataManager.loadGame = function (savefileId: number): Promise<number> {
+    DataManager.loadGame = function(savefileId: number): Promise<number> {
         return _DataManager_loadGame.call(this, savefileId).then((ret: number) => {
             if (CommonSave.isApplyOnLoad()) {
                 return CommonSave.load();
@@ -482,9 +464,9 @@ namespace utakata {
      * Scene_Gameover
      */
     const _Scene_Gameover_prototype_start = Scene_Gameover.prototype.start;
-    Scene_Gameover.prototype.start = function (): void {
+    Scene_Gameover.prototype.start = function(): void {
         if (CommonSave.isApplyOnGameover()) {
-            CommonSave.save();
+            void CommonSave.save();
         }
         _Scene_Gameover_prototype_start.call(this);
     };
