@@ -1,26 +1,3 @@
-    interface Version {
-        major: number;
-        minor: number;
-        release: number;
-    }
-
-    interface CommonSavePluginParameters {
-        saveFileName: string;
-        targetSwitches: string;
-        targetVariables: string;
-        applyOnLoad: string;
-        applyOnSave: string;
-        applyOnNewGame: string;
-        applyOnAutoSave: string;
-        applyOnGameover: string;
-    }
-
-    interface CommonSaveData {
-        version: Version;
-        gameSwitches: { [idx: number]: boolean };
-        gameVariables: { [idx: number]: number };
-    }
-
 //===================================================================
 // UTA_CommonSaveMZ
 //===================================================================
