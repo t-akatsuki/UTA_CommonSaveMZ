@@ -1,9 +1,3 @@
-/**
- * @namespace utakata
- */
-namespace utakata {
-    "use strict";
-
     interface Version {
         major: number;
         minor: number;
@@ -27,6 +21,14 @@ namespace utakata {
         gameVariables: { [idx: number]: number };
     }
 
+//===================================================================
+// UTA_CommonSaveMZ
+//===================================================================
+/// <reference path="./UTA_CommonSaveMZ.d.ts"/>
+/// <reference path="./Version.ts"/>
+/// <reference path="./Error.ts"/>
+
+namespace utakata.UTA_CommonSaveMZ {
     /**
      * @static
      * @class CommonSave
