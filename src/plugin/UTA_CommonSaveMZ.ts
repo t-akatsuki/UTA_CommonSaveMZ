@@ -127,7 +127,7 @@ namespace utakata.UTA_CommonSaveMZ {
                     errStack = e.stack ?? "";
                 }
                 const pluginParametersJsonStr = JSON.stringify(this.parameters);
-                console.error(`[${this.PLUGIN_NAME}] ${this.constructor.name}.loadPluginParameters: Failed to parse plugin parameters.`);
+                console.error(`[${this.PLUGIN_NAME}] CommonSave.loadPluginParameters: Failed to parse plugin parameters.`);
                 console.error(`[${this.PLUGIN_NAME}] Plugin parameters: \n${pluginParametersJsonStr}`);
                 console.error(`[${this.PLUGIN_NAME}] Error message: \n${errMessage}`);
                 console.error(`[${this.PLUGIN_NAME}] Error stack: \n${errStack}`);
@@ -175,7 +175,7 @@ namespace utakata.UTA_CommonSaveMZ {
                     errMessage = e.message ?? "";
                     errStack = e.stack ?? "";
                 }
-                console.error(`[${this.PLUGIN_NAME}] ${this.constructor.name}.loadTargetSwitchesNumber: Failed to load target switches number.`);
+                console.error(`[${this.PLUGIN_NAME}] CommonSave.loadTargetSwitchesNumber: Failed to load target switches number.`);
                 console.error(`[${this.PLUGIN_NAME}] Error message: \n${errMessage}`);
                 console.error(`[${this.PLUGIN_NAME}] Error stack: \n${errStack}`);
                 throw new UTA_CommonSaveError(`[${this.PLUGIN_NAME}] Loading target switches number error (${errMessage})`);
@@ -199,7 +199,7 @@ namespace utakata.UTA_CommonSaveMZ {
                     errMessage = e.message ?? "";
                     errStack = e.stack ?? "";
                 }
-                console.error(`[${this.PLUGIN_NAME}] ${this.constructor.name}.loadTargetVariablesNumber: Failed to load target variables number.`);
+                console.error(`[${this.PLUGIN_NAME}] CommonSave.loadTargetVariablesNumber: Failed to load target variables number.`);
                 console.error(`[${this.PLUGIN_NAME}] Error message: \n${errMessage}`);
                 console.error(`[${this.PLUGIN_NAME}] Error stack: \n${errStack}`);
                 throw new UTA_CommonSaveError(`[${this.PLUGIN_NAME}] Loading target variables number error (${errMessage})`);
@@ -252,7 +252,7 @@ namespace utakata.UTA_CommonSaveMZ {
                     throw new UTA_CommonSaveError(`[${this.PLUGIN_NAME}] parse error: invalid format (${targetStr})`);
                 }
             } catch (e) {
-                console.error(`[${this.PLUGIN_NAME}] ${this.constructor.name}.parseTargetNumber: Failed to parse target number.`);
+                console.error(`[${this.PLUGIN_NAME}] CommonSave.parseTargetNumber: Failed to parse target number.`);
                 throw e;
             }
             return ret;
@@ -298,7 +298,7 @@ namespace utakata.UTA_CommonSaveMZ {
             for (const idx of this.targetSwitches) {
                 // $gameSwitchesは触った事が無いと要素が作られないので範囲チェックできない
                 if (idx < 1) {
-                    console.warn(`[${this.PLUGIN_NAME}] ${this.constructor.name}.getTargetSwitchesJson: Target switch index is out of range. (${idx})`);
+                    console.warn(`[${this.PLUGIN_NAME}] CommonSave.getTargetSwitchesJson: Target switch index is out of range. (${idx})`);
                     continue;
                 }
                 ret[idx] = $gameSwitches.value(idx);
@@ -316,7 +316,7 @@ namespace utakata.UTA_CommonSaveMZ {
             for (const idx of this.targetVariables) {
                 // $gameVariablesは触った事が無いと要素が作られないので範囲チェックできない
                 if (idx < 1) {
-                    console.warn(`[${this.PLUGIN_NAME}] ${this.constructor.name}.getTargetGameVariablesJson: Target variable index is out of range. (${idx})`);
+                    console.warn(`[${this.PLUGIN_NAME}] CommonSave.getTargetGameVariablesJson: Target variable index is out of range. (${idx})`);
                     continue;
                 }
                 ret[idx] = $gameVariables.value(idx);
@@ -382,7 +382,7 @@ namespace utakata.UTA_CommonSaveMZ {
          */
         private static loadCommonSaveSwitches(contents: CommonSaveData): void {
             if (!("gameSwitches" in contents)) {
-                console.warn(`[${this.PLUGIN_NAME}] ${this.constructor.name}.loadCommonSaveSwitches: Ignore process because game switches data are not found in common save data.`);
+                console.warn(`[${this.PLUGIN_NAME}] CommonSave.loadCommonSaveSwitches: Ignore process because game switches data are not found in common save data.`);
                 return;
             }
             try {
@@ -408,7 +408,7 @@ namespace utakata.UTA_CommonSaveMZ {
                     errMessage = e.message ?? "";
                     errStack = e.stack ?? "";
                 }
-                console.error(`[${this.PLUGIN_NAME}] ${this.constructor.name}.loadCommonSaveSwitches: Failed to load game switches from common save data.`);
+                console.error(`[${this.PLUGIN_NAME}] CommonSave.loadCommonSaveSwitches: Failed to load game switches from common save data.`);
                 console.error(`[${this.PLUGIN_NAME}] Error message: \n${errMessage}`);
                 console.error(`[${this.PLUGIN_NAME}] Error stack: \n${errStack}`);
                 throw new UTA_CommonSaveError(`[${this.PLUGIN_NAME}] Loading error (${errMessage})`);
@@ -423,7 +423,7 @@ namespace utakata.UTA_CommonSaveMZ {
          */
         private static loadCommonSaveVariables(contents: CommonSaveData): void {
             if (!("gameVariables" in contents)) {
-                console.warn(`[${this.PLUGIN_NAME}] ${this.constructor.name}.loadCommonSaveVariables: Ignore process because game variables data are not found in common save data.`);
+                console.warn(`[${this.PLUGIN_NAME}] CommonSave.loadCommonSaveVariables: Ignore process because game variables data are not found in common save data.`);
                 return;
             }
             try {
@@ -449,7 +449,7 @@ namespace utakata.UTA_CommonSaveMZ {
                     errMessage = e.message ?? "";
                     errStack = e.stack ?? "";
                 }
-                console.error(`[${this.PLUGIN_NAME}] ${this.constructor.name}.loadCommonSaveVariables: Failed to load game variables from common save data.`);
+                console.error(`[${this.PLUGIN_NAME}] CommonSave.loadCommonSaveVariables: Failed to load game variables from common save data.`);
                 console.error(`[${this.PLUGIN_NAME}] Error message: \n${errMessage}`);
                 console.error(`[${this.PLUGIN_NAME}] Error stack: \n${errStack}`);
                 throw new UTA_CommonSaveError(`[${this.PLUGIN_NAME}] Loading error (${errMessage})`);
@@ -465,7 +465,7 @@ namespace utakata.UTA_CommonSaveMZ {
          */
         private static getCommonSaveDataVersion(contents: CommonSaveData): Version {
             if (!("version" in contents)) {
-                console.error(`[${this.PLUGIN_NAME}] ${this.constructor.name}.getCommonSaveDataVersion: Version data is not found in common save data.`);
+                console.error(`[${this.PLUGIN_NAME}] CommonSave.getCommonSaveDataVersion: Version data is not found in common save data.`);
                 throw new UTA_CommonSaveError(`[${this.PLUGIN_NAME}] Common save data is invalid format`);
             }
             // v0.9.1以前はキー名が異なるが、互換性を担保する
@@ -484,7 +484,7 @@ namespace utakata.UTA_CommonSaveMZ {
                     errStack = e.stack ?? "";
                 }
                 const versionJsonStr = JSON.stringify(contents.version);
-                console.error(`[${this.PLUGIN_NAME}] ${this.constructor.name}.getCommonSaveDataVersion: Failed to get version.`);
+                console.error(`[${this.PLUGIN_NAME}] CommonSave.getCommonSaveDataVersion: Failed to get version.`);
                 console.error(`[${this.PLUGIN_NAME}] Version data: \n${versionJsonStr}`);
                 console.error(`[${this.PLUGIN_NAME}] Error message: \n${errMessage}`);
                 console.error(`[${this.PLUGIN_NAME}] Error stack: \n${errStack}`);
@@ -528,7 +528,7 @@ namespace utakata.UTA_CommonSaveMZ {
         public static load(): Promise<number> {
             if (!this.exists()) {
                 return new Promise((resolve) => {
-                    console.info(`[${this.PLUGIN_NAME}] ${this.constructor.name}.load: Common save data is not existed.`);
+                    console.info(`[${this.PLUGIN_NAME}] CommonSave.load: Common save data is not existed.`);
                     resolve(0);
                 });
             }
@@ -550,7 +550,7 @@ namespace utakata.UTA_CommonSaveMZ {
             const contents = this.makeSaveContents();
             const saveName = this.makeSaveName();
             return StorageManager.saveObject(saveName, contents).then(() => {
-                console.info(`[${this.PLUGIN_NAME}] ${this.constructor.name}.load: Saving common save data succeeded. (save filename=${saveName})`);
+                console.info(`[${this.PLUGIN_NAME}] CommonSave.load: Saving common save data succeeded. (save filename=${saveName})`);
                 return 0;
             });
         }
@@ -563,12 +563,12 @@ namespace utakata.UTA_CommonSaveMZ {
          */
         public static remove(): void {
             if (!this.exists()) {
-                console.info(`[${this.PLUGIN_NAME}] ${this.constructor.name}.remove: Common save data is not existed.`);
+                console.info(`[${this.PLUGIN_NAME}] CommonSave.remove: Common save data is not existed.`);
                 return;
             }
             const saveName = this.makeSaveName();
             StorageManager.remove(saveName);
-            console.info(`[${this.PLUGIN_NAME}] ${this.constructor.name}.remove: Remove common save data. (save filename=${saveName})`);
+            console.info(`[${this.PLUGIN_NAME}] CommonSave.remove: Remove common save data. (save filename=${saveName})`);
         }
 
         /**
@@ -578,8 +578,8 @@ namespace utakata.UTA_CommonSaveMZ {
         public static check(): void {
             const targetSwitchesStr = this.targetSwitches.join(",");
             const targetVariablesStr = this.targetVariables.join(",");
-            console.info(`[${this.PLUGIN_NAME}] ${this.constructor.name}.check: Current target switches number.\n${targetSwitchesStr}`);
-            console.info(`[${this.PLUGIN_NAME}] ${this.constructor.name}.check: Current target variables number.\n${targetVariablesStr}`);
+            console.info(`[${this.PLUGIN_NAME}] CommonSave.check: Current target switches number.\n${targetSwitchesStr}`);
+            console.info(`[${this.PLUGIN_NAME}] CommonSave.check: Current target variables number.\n${targetVariablesStr}`);
         }
 
         /**
