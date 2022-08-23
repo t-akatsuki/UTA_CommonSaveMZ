@@ -113,6 +113,12 @@ namespace utakata.UTA_CommonSaveMZ {
                 this.parameters.saveFileName = pluginParameters?.saveFileName ? 
                     pluginParameters.saveFileName : 
                     this.SAVEFILE_DEFAULT_NAME;
+                /**
+                 * checkGameIdentity: boolean
+                 */
+                this.parameters.checkGameIdentity = pluginParameters?.checkGameIdentity ? 
+                    <boolean>JsonEx.parse(pluginParameters.checkGameIdentity) : 
+                    true;
 
                 /**
                  * 対象となるスイッチ/変数番号リストを取得
@@ -341,11 +347,12 @@ namespace utakata.UTA_CommonSaveMZ {
         /**
          * 共有セーブするデータを作成する
          * 
-         * @returns 共有セーブするデータの連想配列
+         * @returns 共有セーブデータ作成処理promise/共有セーブするデータの連想配列
          */
-        private static makeSaveContents(): CommonSaveData {
+        private static async makeSaveContents(): Promise<CommonSaveData> {
             const contents: CommonSaveData = {
                 "version": this.getCurrentVersionDict(),
+                "gameIdentity": await this.getCurrentGameIdentity(),
                 "gameSwitches": this.makeTargetGameSwitchesJson(),
                 "gameVariables": this.makeTargetGameVariablesJson()
             };
@@ -493,19 +500,96 @@ namespace utakata.UTA_CommonSaveMZ {
         }
 
         /**
+         * 現在のゲームを一意に特定する為のハッシュ値を取得する
+         * 
+         * @returns ハッシュ取得処理のpromiseオブジェクト/計算したハッシュ文字列を返す
+         * @throws {@link UTA_CommonSaveError} ハッシュ計算時エラーの際に送出される
+         */
+         private static async getCurrentGameIdentity(): Promise<string> {
+            try {
+                const gameId = $dataSystem.advanced.gameId ?? "";
+                const messageUint8 = new TextEncoder().encode(`${this.PLUGIN_NAME}-${gameId}`);
+                const hashBuffer = await crypto.subtle.digest("SHA-256", messageUint8);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                const hexString = hashArray.map((b: number) => b.toString(16).padStart(2, "0")).join("");
+                return hexString;
+            } catch (e) {
+                let errMessage = "";
+                let errStack = "";
+                if (e instanceof Error) {
+                    errMessage = e.message ?? "";
+                    errStack = e.stack ?? "";
+                }
+                console.error(`[${this.PLUGIN_NAME}] CommonSave.getCurrentGameIdentity: Failed to crete current game identity hash.`);
+                console.error(`[${this.PLUGIN_NAME}] Error message: \n${errMessage}`);
+                console.error(`[${this.PLUGIN_NAME}] Error stack: \n${errStack}`);
+                throw new UTA_CommonSaveError(`[${this.PLUGIN_NAME}] Failed to create current game identity hash (${errMessage})`);
+            }
+        }
+
+        /**
+         * 共有セーブデータからゲームの一意特定ハッシュ値を取得する
+         * 
+         * @remarks
+         * v1.0.0未満で作成された共有セーブデータには取得対象が含まれていない点に注意
+         * 
+         * @param contents - ロードした共有セーブデータ
+         * @returns 共有セーブデータに保存されたゲーム一意特定ハッシュ値
+         * @throws {@link UTA_CommonSaveError} 取得対象が存在しない場合に送出される
+         */
+        private static getCommonSaveIdentity(contents: CommonSaveData): string {
+            if (!("gameIdentity" in contents)) {
+                console.error(`[${this.PLUGIN_NAME}] CommonSave.getCommonSaveIdentity: Game identity data is not found in common save data.`);
+                throw new UTA_CommonSaveError(`[${this.PLUGIN_NAME}] Common save data is invalid format`);
+            }
+            return contents.gameIdentity ?? "";
+        }
+
+        /**
+         * 共有セーブデータと現在起動中のゲームの同一チェックを行う
+         * 
+         * @param contents - ロードした共有セーブデータ
+         * @throws {@link UTA_CommonSaveError} 同一ゲームで無い場合に送出される
+         */
+        private static async checkGameIdentity(contents: CommonSaveData): Promise<void> {
+            const currentGameIdentity = await this.getCurrentGameIdentity();
+            const commonSaveGameIdentity = this.getCommonSaveIdentity(contents);
+            if (currentGameIdentity !== commonSaveGameIdentity) {
+                console.error(`[${this.PLUGIN_NAME}] CommonSave.loadCore: Ditected different game identity.`);
+                console.error(`[${this.PLUGIN_NAME}] Current game identity: ${currentGameIdentity}`);
+                console.error(`[${this.PLUGIN_NAME}] Common save gameIdentity: ${commonSaveGameIdentity}`);
+                throw new UTA_CommonSaveError(`[${this.PLUGIN_NAME}] Ditected different game identity`);
+            }
+        }
+
+        /**
          * 共有セーブデータのロードコア処理
          * 
          * @param contents - ロードした共有セーブデータ
          */
-        private static loadCore(contents: CommonSaveData): void {
+        private static async loadCore(contents: CommonSaveData): Promise<void> {
             /**
              * バージョンに応じた特殊処理を行う場合はここに処理を追加する
              */
+            let isCheckGameIdentity = <boolean>this.parameters.checkGameIdentity;
+
             // 共有セーブデータ内に記録したバージョンを取得
             const version = this.getCommonSaveDataVersion(contents);
-            switch (version?.toString()) {
-                default:
-                    break;
+
+            /**
+             * v1.0.0未満
+             * ゲーム同一性チェック機能が無かった為、検査対象外とする
+             */
+            if (version.isLessThan(new Version(1, 0, 0))) {
+                isCheckGameIdentity = false;
+            }
+
+            /**
+             * ゲーム同一チェック
+             * 同一ゲームで無い場合は例外を送出
+             */
+            if (isCheckGameIdentity) {
+                await this.checkGameIdentity(contents);
             }
 
             /**
@@ -533,9 +617,9 @@ namespace utakata.UTA_CommonSaveMZ {
                 });
             }
             const saveName = this.makeSaveName();
-            return StorageManager.loadObject(saveName).then((contents: CommonSaveData) => {
-                this.loadCore(contents);
-                console.info(`[${this.PLUGIN_NAME}] ${this.constructor.name}.load: Loading common save data succeeded. (save filename=${saveName})`);
+            return StorageManager.loadObject(saveName).then(async(contents: CommonSaveData) => {
+                await this.loadCore(contents);
+                console.info(`[${this.PLUGIN_NAME}] CommonSave.load: Loading common save data succeeded. (save filename=${saveName})`);
                 return 0;
             });
         }
@@ -544,10 +628,10 @@ namespace utakata.UTA_CommonSaveMZ {
          * 共有セーブデータのセーブ処理
          * local版/web版共通
          * 
-         * @returns セーブ処理のpromiseオブジェクト
+         * @returns セーブ処理のpromiseオブジェクト/セーブ番号(共有セーブは常に一つの為0番が返る)
          */
-        public static save(): Promise<number> {
-            const contents = this.makeSaveContents();
+        public static async save(): Promise<number> {
+            const contents = await this.makeSaveContents();
             const saveName = this.makeSaveName();
             return StorageManager.saveObject(saveName, contents).then(() => {
                 console.info(`[${this.PLUGIN_NAME}] CommonSave.load: Saving common save data succeeded. (save filename=${saveName})`);

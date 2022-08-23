@@ -31,6 +31,11 @@ interface CommonSaveData {
      */
     version: CommonSaveDataVersion | OldCommonSaveDataVersion;
     /**
+     * ゲーム同一チェック用ハッシュ
+     * v1.0.0から追加
+     */
+    gameIdentity?: string;
+    /**
      * 共有対象スイッチデータ
      */
     gameSwitches: { [idx: number]: boolean };
@@ -90,6 +95,12 @@ interface CommonSavePluginParameters {
      * 共有セーブデータファイル名
      */
     saveFileName?: string;
+    /**
+     * ゲーム同一チェック
+     * v1.0.0から追加
+     * json文字列形式で与えられる論理値
+     */
+    checkGameIdentity?: boolean
 }
 
 /**
