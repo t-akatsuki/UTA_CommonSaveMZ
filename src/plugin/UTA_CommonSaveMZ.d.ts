@@ -26,8 +26,17 @@ interface CommonSaveDataVersion {
  * 共有セーブデータファイル内データ
  */
 interface CommonSaveData {
+    /**
+     * 共有セーブデータのバージョン
+     */
     version: CommonSaveDataVersion | OldCommonSaveDataVersion;
+    /**
+     * 共有対象スイッチデータ
+     */
     gameSwitches: { [idx: number]: boolean };
+    /**
+     * 共有対象変数データ
+     */
     gameVariables: { [idx: number]: number };
 }
 
