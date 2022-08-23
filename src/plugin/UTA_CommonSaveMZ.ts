@@ -391,6 +391,13 @@ namespace utakata.UTA_CommonSaveMZ {
                     if (idx !== idx) {
                         throw new Error(`switch number has been parsed to NaN (${key})`);
                     }
+
+                    // 後から対象を減らした場合に意図しない反映がなされる可能性がある為、
+                    // 現在の共有対象の番号である場合のみに反映する
+                    if (this.targetSwitches.indexOf(idx) < 0) {
+                        continue;
+                    }
+
                     const value = contents.gameSwitches[key];
                     $gameSwitches.setValue(idx, value);
                 }
@@ -425,6 +432,13 @@ namespace utakata.UTA_CommonSaveMZ {
                     if (idx !== idx) {
                         throw new Error(`variable number has been parsed to NaN (${key})`);
                     }
+
+                    // 後から対象を減らした場合に意図しない反映がなされる可能性がある為、
+                    // 現在の共有対象の番号である場合のみに反映する
+                    if (this.targetVariables.indexOf(idx) < 0) {
+                        continue;
+                    }
+
                     const value = contents.gameVariables[key];
                     $gameVariables.setValue(idx, value);
                 }
