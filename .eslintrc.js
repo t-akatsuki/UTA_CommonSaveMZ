@@ -49,7 +49,7 @@
         // 関数定義の引数括弧の前にスペースを強要しない(typescript-eslintで設定)
         "space-before-function-paren": "off",
         // 括弧内のスペースを強要しない
-        "space-in-parens": ["error", "never"],
+        "space-in-parens": "off",
         /**
          * typescript-eslint rules
          * https://typescript-eslint.io/rules/
@@ -77,7 +77,7 @@
         // ブロックステートメントの括弧の前にスペースを入れる
         "@typescript-eslint/space-before-blocks": ["error"],
         // 関数定義の引数括弧の前にスペースを強要しない
-        "@typescript-eslint/space-before-function-paren": ["error", "never"],
+        "@typescript-eslint/space-before-function-paren": "off",
         // non moduleではimport等が利用できない為、トリプルスラッシュ参照を許容する
         "@typescript-eslint/triple-slash-reference": [
             "error",
