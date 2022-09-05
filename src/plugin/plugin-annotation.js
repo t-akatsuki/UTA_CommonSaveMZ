@@ -216,37 +216,42 @@
  * @param applyOnLoad
  * @type boolean
  * @default true
+ * @on 自動適用する
+ * @off 自動適用しない
  * @text ロード時の共有セーブ自動適用
  * @desc ロード時に共有セーブデータの自動適用を行うか。
- * ON(true): 自動適用する, OFF(false): 自動適用しない
  * 
  * @param applyOnSave
  * @type boolean
  * @default true
+ * @on 自動保存する
+ * @off 自動保存しない
  * @text セーブ時の共有セーブ自動保存
  * @desc セーブ時に共有セーブデータの自動保存を行うか。
- * ON(true): 自動保存する, OFF(false): 自動保存しない
  * 
  * @param applyOnNewGame
  * @type boolean
  * @default true
+ * @on 自動適用する
+ * @off 自動適用しない
  * @text ニューゲーム時の共有セーブ自動適用
  * @desc ニューゲーム時に共有セーブの自動適用を行うか。
- * ON(true): 自動適用する, OFF(false): 自動適用しない
  * 
  * @param applyOnAutoSave
  * @type boolean
  * @default false
+ * @on 自動保存する
+ * @off 自動保存しない
  * @text オートセーブ時の共有セーブ自動保存
  * @desc オートセーブ時に共有セーブの自動保存を行うか。
- * ON(true): 自動保存する, OFF(false): 自動保存しない
  * 
  * @param applyOnGameover
  * @type boolean
  * @default true
+ * @on 自動保存する
+ * @off 自動保存しない
  * @text ゲームオーバー時の共有セーブ自動保存
  * @desc ゲームオーバー時に共有セーブデータの自動保存を行うか。
- * ON(true): 自動保存する, OFF(false): 自動保存しない
  * 
  * @param saveFileName
  * @type string
@@ -369,7 +374,7 @@
  * 動作確認用のプラグインコマンドです。
  * 
  * # プラグインの情報
- * バージョン : 1.0.0-rc1
+ * バージョン : 1.0.0
  * 最終更新日 : 2022/MM/DD
  * 制作者     : 赤月 智平(t-akatsuki)
  * Webサイト  : https://www.utakata-no-yume.net
@@ -380,6 +385,7 @@
  * # 更新履歴
  * ## v1.0.0 (2022/MM/DD)
  * 後から共有対象を減らした場合に意図しない反映が行われる事ある問題を対処。
+ * 同一ゲームチェック機能を追加。
  * 配布対象ファイルを調整。
  * 配布対象に取扱説明書を同梱するように。
  * 
