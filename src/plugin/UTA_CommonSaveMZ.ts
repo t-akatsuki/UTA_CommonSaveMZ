@@ -762,6 +762,6 @@ namespace utakata.UTA_CommonSaveMZ {
         if (CommonSave.isApplyOnGameover()) {
             void CommonSave.save();
         }
-        _Scene_Gameover_prototype_start.call(this);
+        return _Scene_Gameover_prototype_start.call(this);
     };
 }
