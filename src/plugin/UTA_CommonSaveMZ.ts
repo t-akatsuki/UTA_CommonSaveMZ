@@ -656,18 +656,26 @@ namespace utakata.UTA_CommonSaveMZ {
 
         /**
          * 「初めから」即セーブ状態であるかを判定する
+         * 
+         * @remarks
          * 一度タイトル画面に戻ってから「初めから」を選んだ場合に
          * 何故かオートセーブ処理が実行されてしまい共有セーブが初期状態で上書きされてしまう状態を
          * 回避する為の判定処理
          * 対症療法である為、この処理はコアスクリプトの改修に合わせて修正する
          * 
+         * 「続きから」でも同様の事象が発生するが、データロード後である為に上記の問題が発生する事は無い
+         * 
+         * コアスクリプトバージョン v1.5.0
+         * 公式サポート問い合わせの結果「現状仕様」との事
+         * 
          * @return 「初めから」即セーブの場合はtrueを返す
          */
         public static checkNewGame(): boolean {
             // 「初めから」の場合はセーブカウントが必ず0から始まる
-            // $gameSystem.onBeforeSaveでインクリメントされる為、
-            // StorageManager.saveObjectのタイミングで必ず1以上になる
-            // 初めから即セーブ時は必ず1になる
+            // 本処理が呼び出されるタイミングでは$gameSystem.onBeforeSaveでインクリメントされている為、
+            // 「初めから」後の初セーブタイミングで本処理の実行タイミングで2以上になるはず
+            // 事象発生時に開始直後に任意でセーブを行った場合は3以上になる
+            // 事象発生しない場合はこの条件をすり抜ける可能性があるが、後続の条件分岐で判定可能
             if ($gameSystem.saveCount() > 1) {
                 return false;
             }
@@ -679,6 +687,7 @@ namespace utakata.UTA_CommonSaveMZ {
             if ($gameParty.steps() > 0) {
                 return false;
             }
+            // 全ての条件を満たす場合は「初めから即セーブ状態」と見なす
             return true;
         }
     }
@@ -689,9 +698,9 @@ namespace utakata.UTA_CommonSaveMZ {
     CommonSave.initialize();
 
     /**
-     * DataManager
+     * DataManager.setupNewGame
+     * ニューゲーム処理時に共有セーブデータロード処理をフック
      */
-    // ニューゲーム処理時に共有セーブデータロード処理をフック
     const _DataManager_setupNewGame = DataManager.setupNewGame;
     DataManager.setupNewGame = function(): void {
         _DataManager_setupNewGame.call(this);
@@ -700,14 +709,19 @@ namespace utakata.UTA_CommonSaveMZ {
         }
     };
 
-    // セーブ処理に共有セーブデータセーブ処理をフック
+    /**
+     * DataManager.saveGame
+     * セーブ処理に共有セーブデータセーブ処理をフック
+     * セーブ処理にフックする事が目的である為、共有セーブデータのセーブ処理をpromise内で待たない
+     * 例外補足すると場合によっては別のプラグインで拡張されたpromiseチェーンの例外を補足する可能性がある為、
+     * 意図的にcatchしない
+     */
     const _DataManager_saveGame = DataManager.saveGame;
     DataManager.saveGame = function(savefileId: number): Promise<number> {
         return _DataManager_saveGame.call(this, savefileId).then(async (ret: number) => {
             // savefileId = 0 is auto save
-            // RPGMakerMZ v1.0.1:
-            // 一度タイトル画面に戻ってから「初めから」を選んだ場合に
-            // 何故かオートセーブ処理が実行されてしまい共有セーブが初期状態で上書きされてしまう
+            // 一度タイトル画面に戻ってから「初めから/続きから」を選んだ場合に何故かオートセーブ処理が実行されてしまう
+            // 「初めから」の場合、共有セーブが初期状態で上書きされてしまう
             // この現象を回避する為に明らかにゲームスタート直後の場合は共有セーブしないようにする
             if (savefileId === 0) {
                 if (CommonSave.isApplyOnAutoSave() && !CommonSave.checkNewGame()) {
