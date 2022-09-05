@@ -25,37 +25,42 @@
  * @param applyOnLoad
  * @type boolean
  * @default true
+ * @on enabled
+ * @off disabled
  * @text Apply common save on load game
  * @desc Automatically loading common save on load game timing.
- * ON(true): enabled, OFF(false): disabled
  * 
  * @param applyOnSave
  * @type boolean
  * @default true
+ * @on enabled
+ * @off disabled
  * @text Save common save on save game
  * @desc Automatically saving common save on save game timing.
- * ON(true): enabled, OFF(false): disabled
  * 
  * @param applyOnNewGame
  * @type boolean
  * @default true
+ * @on enabled
+ * @off disabled
  * @text Apply common save on new game
  * @desc Automatically loading common save on start new game.
- * ON(true): enabled, OFF(false): disabled
  * 
  * @param applyOnAutoSave
  * @type boolean
  * @default false
+ * @on enabled
+ * @off disabled
  * @text Save common save on auto-save
  * @desc Automatically saving common save on auto-save timing.
- * ON(true): enabled, OFF(false): disabled
  * 
  * @param applyOnGameover
  * @type boolean
  * @default true
+ * @on enabled
+ * @off disabled
  * @text Save common save on gameover
  * @desc Automatically saving common save on gameover timing.
- * ON(true): enabled, OFF(false): disabled
  * 
  * @param saveFileName
  * @type string
@@ -63,6 +68,15 @@
  * @text Save file name
  * @desc Definition of common save file name,
  * which not contained extension.
+ * 
+ * @param checkGameIdentity
+ * @type boolean
+ * @default true
+ * @on enabled
+ * @off disabled
+ * @text Check game identity
+ * @desc Checking whether common save has origin of same game.
+ * Raise error when common save is detected different game.
  * 
  * @command load
  * @text Load common save
@@ -118,35 +132,35 @@
  * 
  * ## Apply common save on load game
  * Automatically loading common save on load game timing.
- *   ON(true)   : enabled(default)
- *   OFF(false): disabled
+ * (default: enabled)
  * 
  * ## Save common save on save game
  * Automatically saving common save on save game timing.
- *   ON(true)  : enabled(default)
- *   OFF(false): disabled
+ * (default: enabled)
  * 
  * ## Apply common save on new game
  * Automatically loading common save on start new game.
- *   ON(true)  : enabled(default)
- *   OFF(false): disabled
+ * (default: enabled)
  * 
  * ## Save common save on auto-save
  * Automatically saving common save on auto-save timing.
- *   ON(true)  : enabled
- *   OFF(false): disabled(default)
+ * (dedault: disabled)
  * 
  * ## Save common save on gameover
  * Automatically saving common save on gameover timing.
- *   ON(true)  : enabled(default)
- *   OFF(false): disabled
+ * (default: enabled)
  * 
  * ## Save file name
  * Definition of common save file name,
  * which not contained extension.
- * Do not use the same name as the existing save data
+ * Do not use the same name as the existing save data 
  * (file0, global, confid, etc...).
- *   (default: uta_common)
+ * (default: uta_common)
+ * 
+ * ## Check game identity
+ * Checking whether common save data has origin of same game.
+ * Prevents troubles such as using common save data of other games.
+ * (default: enabled)
  * 
  * # Plugin Commands
  * ## Load common save
@@ -178,6 +192,7 @@
  * ## v1.0.0 (2022/MM/DD)
  * Fixed the problem that unintended loading when the sharing target is 
  * reduced later.
+ * Added function of checking whether save data has origin of same game.
  * Adjusted files for distribution.
  * Included an instruction manual in distribution.
  * 
