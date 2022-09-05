@@ -20,4 +20,22 @@ namespace utakata.UTA_CommonSaveMZ {
             super(message);
         }
     }
+
+    /**
+     * UTA_CommonSave セーブファイル関連エラークラス
+     */
+    export class UTA_CommonSaveFileError extends UTA_CommonSaveError {
+        constructor(message = "") {
+            super(message);
+        }
+    }
+
+    /**
+     * UTA_CommonSave セキュリティ関連エラークラス
+     */
+    export class UTA_CommonSaveSecurrityError extends UTA_CommonSaveError {
+        constructor(mesasge = "") {
+            super(mesasge);
+        }
+    }
 }
