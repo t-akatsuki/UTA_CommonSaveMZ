@@ -96,7 +96,7 @@ interface CommonSavePluginParameters {
      */
     saveFileName?: string;
     /**
-     * ゲーム同一チェック
+     * 同一ゲームチェック
      * v1.0.0から追加
      * json文字列形式で与えられる論理値
      */

@@ -4,6 +4,7 @@
 /// <reference path="./UTA_CommonSaveMZ.d.ts"/>
 /// <reference path="./Version.ts"/>
 /// <reference path="./Error.ts"/>
+/// <reference path="./GameIdentityManager.ts"/>
 
 namespace utakata.UTA_CommonSaveMZ {
     /**
@@ -347,12 +348,12 @@ namespace utakata.UTA_CommonSaveMZ {
         /**
          * 共有セーブするデータを作成する
          * 
-         * @returns 共有セーブデータ作成処理promise/共有セーブするデータの連想配列
+         * @returns 共有セーブするデータの連想配列
          */
-        private static async makeSaveContents(): Promise<CommonSaveData> {
+        private static makeSaveContents(): CommonSaveData {
             const contents: CommonSaveData = {
                 "version": this.getCurrentVersionDict(),
-                "gameIdentity": await this.getCurrentGameIdentity(),
+                "gameIdentity": GameIdentityManager.getCurrentGameIdentity(),
                 "gameSwitches": this.makeTargetGameSwitchesJson(),
                 "gameVariables": this.makeTargetGameVariablesJson()
             };
@@ -385,7 +386,7 @@ namespace utakata.UTA_CommonSaveMZ {
          * 共有セーブオブジェクトから$gameSwitchesにデータをロードする
          * 
          * @param contents - ロードした共有セーブデータオブジェクト
-         * @throws {@link UTA_CommonSaveError} ロード失敗時に送出される
+         * @throws {@link UTA_CommonSaveFileError} ロード失敗時に送出される
          */
         private static loadCommonSaveSwitches(contents: CommonSaveData): void {
             if (!("gameSwitches" in contents)) {
@@ -418,7 +419,7 @@ namespace utakata.UTA_CommonSaveMZ {
                 console.error(`[${this.PLUGIN_NAME}] CommonSave.loadCommonSaveSwitches: Failed to load game switches from common save data.`);
                 console.error(`[${this.PLUGIN_NAME}] Error message: \n${errMessage}`);
                 console.error(`[${this.PLUGIN_NAME}] Error stack: \n${errStack}`);
-                throw new UTA_CommonSaveError(`[${this.PLUGIN_NAME}] Loading error (${errMessage})`);
+                throw new UTA_CommonSaveFileError(`[${this.PLUGIN_NAME}] Loading error (${errMessage})`);
             }
         }
 
@@ -426,7 +427,7 @@ namespace utakata.UTA_CommonSaveMZ {
          * 共有セーブオブジェクトから$gameVariablesにデータをロードする
          * 
          * @param contents - ロードした共有セーブデータオブジェクト
-         * @throws {@link UTA_CommonSaveError} ロード失敗時に送出される
+         * @throws {@link UTA_CommonSaveFileError} ロード失敗時に送出される
          */
         private static loadCommonSaveVariables(contents: CommonSaveData): void {
             if (!("gameVariables" in contents)) {
@@ -459,7 +460,7 @@ namespace utakata.UTA_CommonSaveMZ {
                 console.error(`[${this.PLUGIN_NAME}] CommonSave.loadCommonSaveVariables: Failed to load game variables from common save data.`);
                 console.error(`[${this.PLUGIN_NAME}] Error message: \n${errMessage}`);
                 console.error(`[${this.PLUGIN_NAME}] Error stack: \n${errStack}`);
-                throw new UTA_CommonSaveError(`[${this.PLUGIN_NAME}] Loading error (${errMessage})`);
+                throw new UTA_CommonSaveFileError(`[${this.PLUGIN_NAME}] Loading error (${errMessage})`);
             }
         }
 
@@ -468,7 +469,7 @@ namespace utakata.UTA_CommonSaveMZ {
          * 
          * @param contents - 共有セーブデータjsonオブジェクト
          * @returns {@link Version} 引数の共有セーブデータから得られたバージョンオブジェクト
-         * @throws {@link UTA_CommonSaveError} バージョンデータの読み込みに失敗した場合に送出される
+         * @throws {@link UTA_CommonSaveFileError} バージョンデータの読み込みに失敗した場合に送出される
          */
         private static getCommonSaveDataVersion(contents: CommonSaveData): Version {
             if (!("version" in contents)) {
@@ -495,70 +496,7 @@ namespace utakata.UTA_CommonSaveMZ {
                 console.error(`[${this.PLUGIN_NAME}] Version data: \n${versionJsonStr}`);
                 console.error(`[${this.PLUGIN_NAME}] Error message: \n${errMessage}`);
                 console.error(`[${this.PLUGIN_NAME}] Error stack: \n${errStack}`);
-                throw new UTA_CommonSaveError(`[${this.PLUGIN_NAME}] Common save data is invalid format (${errMessage})`);
-            }
-        }
-
-        /**
-         * 現在のゲームを一意に特定する為のハッシュ値を取得する
-         * 
-         * @returns ハッシュ取得処理のpromiseオブジェクト/計算したハッシュ文字列を返す
-         * @throws {@link UTA_CommonSaveError} ハッシュ計算時エラーの際に送出される
-         */
-         private static async getCurrentGameIdentity(): Promise<string> {
-            try {
-                const gameId = $dataSystem.advanced.gameId ?? "";
-                const messageUint8 = new TextEncoder().encode(`${this.PLUGIN_NAME}-${gameId}`);
-                const hashBuffer = await crypto.subtle.digest("SHA-256", messageUint8);
-                const hashArray = Array.from(new Uint8Array(hashBuffer));
-                const hexString = hashArray.map((b: number) => b.toString(16).padStart(2, "0")).join("");
-                return hexString;
-            } catch (e) {
-                let errMessage = "";
-                let errStack = "";
-                if (e instanceof Error) {
-                    errMessage = e.message ?? "";
-                    errStack = e.stack ?? "";
-                }
-                console.error(`[${this.PLUGIN_NAME}] CommonSave.getCurrentGameIdentity: Failed to crete current game identity hash.`);
-                console.error(`[${this.PLUGIN_NAME}] Error message: \n${errMessage}`);
-                console.error(`[${this.PLUGIN_NAME}] Error stack: \n${errStack}`);
-                throw new UTA_CommonSaveError(`[${this.PLUGIN_NAME}] Failed to create current game identity hash (${errMessage})`);
-            }
-        }
-
-        /**
-         * 共有セーブデータからゲームの一意特定ハッシュ値を取得する
-         * 
-         * @remarks
-         * v1.0.0未満で作成された共有セーブデータには取得対象が含まれていない点に注意
-         * 
-         * @param contents - ロードした共有セーブデータ
-         * @returns 共有セーブデータに保存されたゲーム一意特定ハッシュ値
-         * @throws {@link UTA_CommonSaveError} 取得対象が存在しない場合に送出される
-         */
-        private static getCommonSaveIdentity(contents: CommonSaveData): string {
-            if (!("gameIdentity" in contents)) {
-                console.error(`[${this.PLUGIN_NAME}] CommonSave.getCommonSaveIdentity: Game identity data is not found in common save data.`);
-                throw new UTA_CommonSaveError(`[${this.PLUGIN_NAME}] Common save data is invalid format`);
-            }
-            return contents.gameIdentity ?? "";
-        }
-
-        /**
-         * 共有セーブデータと現在起動中のゲームの同一チェックを行う
-         * 
-         * @param contents - ロードした共有セーブデータ
-         * @throws {@link UTA_CommonSaveError} 同一ゲームで無い場合に送出される
-         */
-        private static async checkGameIdentity(contents: CommonSaveData): Promise<void> {
-            const currentGameIdentity = await this.getCurrentGameIdentity();
-            const commonSaveGameIdentity = this.getCommonSaveIdentity(contents);
-            if (currentGameIdentity !== commonSaveGameIdentity) {
-                console.error(`[${this.PLUGIN_NAME}] CommonSave.loadCore: Ditected different game identity.`);
-                console.error(`[${this.PLUGIN_NAME}] Current game identity: ${currentGameIdentity}`);
-                console.error(`[${this.PLUGIN_NAME}] Common save gameIdentity: ${commonSaveGameIdentity}`);
-                throw new UTA_CommonSaveError(`[${this.PLUGIN_NAME}] Ditected different game identity`);
+                throw new UTA_CommonSaveFileError(`[${this.PLUGIN_NAME}] Common save data is invalid format (${errMessage})`);
             }
         }
 
@@ -566,8 +504,11 @@ namespace utakata.UTA_CommonSaveMZ {
          * 共有セーブデータのロードコア処理
          * 
          * @param contents - ロードした共有セーブデータ
+         * @throws {@link UTA_CommonSaveError} 処理中に何らかの例外を補足した場合に送出
+         * @throws {@link UTA_CommonSaveFileError} 共有セーブファイル関連の問題が発生した場合に送出
+         * @throws {@link UTA_CommonSaveSecurrityError} セキュリティ上の問題を検知した場合に送出
          */
-        private static async loadCore(contents: CommonSaveData): Promise<void> {
+        private static loadCore(contents: CommonSaveData): void {
             /**
              * バージョンに応じた特殊処理を行う場合はここに処理を追加する
              */
@@ -585,11 +526,13 @@ namespace utakata.UTA_CommonSaveMZ {
             }
 
             /**
-             * ゲーム同一チェック
+             * 同一ゲームチェック
              * 同一ゲームで無い場合は例外を送出
              */
             if (isCheckGameIdentity) {
-                await this.checkGameIdentity(contents);
+                if (!GameIdentityManager.checkGameIdentity(contents)) {
+                    throw new UTA_CommonSaveSecurrityError(`[${this.PLUGIN_NAME}] CommonSave.loadCore: Ditected different game identity`);
+                }
             }
 
             /**
@@ -609,7 +552,7 @@ namespace utakata.UTA_CommonSaveMZ {
          * 
          * @returns ロード処理のpromiseオブジェクト
          */
-        public static load(): Promise<number> {
+        public static async load(): Promise<number> {
             if (!this.exists()) {
                 return new Promise((resolve) => {
                     console.info(`[${this.PLUGIN_NAME}] CommonSave.load: Common save data is not existed.`);
@@ -617,8 +560,8 @@ namespace utakata.UTA_CommonSaveMZ {
                 });
             }
             const saveName = this.makeSaveName();
-            return StorageManager.loadObject(saveName).then(async(contents: CommonSaveData) => {
-                await this.loadCore(contents);
+            return StorageManager.loadObject(saveName).then((contents: CommonSaveData) => {
+                this.loadCore(contents);
                 console.info(`[${this.PLUGIN_NAME}] CommonSave.load: Loading common save data succeeded. (save filename=${saveName})`);
                 return 0;
             });
@@ -631,10 +574,10 @@ namespace utakata.UTA_CommonSaveMZ {
          * @returns セーブ処理のpromiseオブジェクト/セーブ番号(共有セーブは常に一つの為0番が返る)
          */
         public static async save(): Promise<number> {
-            const contents = await this.makeSaveContents();
+            const contents = this.makeSaveContents();
             const saveName = this.makeSaveName();
             return StorageManager.saveObject(saveName, contents).then(() => {
-                console.info(`[${this.PLUGIN_NAME}] CommonSave.load: Saving common save data succeeded. (save filename=${saveName})`);
+                console.info(`[${this.PLUGIN_NAME}] CommonSave.save: Saving common save data succeeded. (save filename=${saveName})`);
                 return 0;
             });
         }
@@ -760,7 +703,7 @@ namespace utakata.UTA_CommonSaveMZ {
     // セーブ処理に共有セーブデータセーブ処理をフック
     const _DataManager_saveGame = DataManager.saveGame;
     DataManager.saveGame = function(savefileId: number): Promise<number> {
-        return _DataManager_saveGame.call(this, savefileId).then((ret: number) => {
+        return _DataManager_saveGame.call(this, savefileId).then(async (ret: number) => {
             // savefileId = 0 is auto save
             // RPGMakerMZ v1.0.1:
             // 一度タイトル画面に戻ってから「初めから」を選んだ場合に
@@ -768,24 +711,27 @@ namespace utakata.UTA_CommonSaveMZ {
             // この現象を回避する為に明らかにゲームスタート直後の場合は共有セーブしないようにする
             if (savefileId === 0) {
                 if (CommonSave.isApplyOnAutoSave() && !CommonSave.checkNewGame()) {
-                    return CommonSave.save();
+                    await CommonSave.save();
                 }
                 return ret;
             }
 
             if (CommonSave.isApplyOnSave()) {
-                return CommonSave.save();
+                void CommonSave.save();
             }
             return ret;
         });
     };
 
-    // ロード処理に共有セーブデータロード処理をフック
+    /**
+     * DataManager.loadGame
+     * ロード処理に共有セーブデータロード処理をフック
+     */
     const _DataManager_loadGame = DataManager.loadGame;
     DataManager.loadGame = function(savefileId: number): Promise<number> {
-        return _DataManager_loadGame.call(this, savefileId).then((ret: number) => {
+        return _DataManager_loadGame.call(this, savefileId).then(async (ret: number) => {
             if (CommonSave.isApplyOnLoad()) {
-                return CommonSave.load();
+                await CommonSave.load();
             }
             return ret;
         });
