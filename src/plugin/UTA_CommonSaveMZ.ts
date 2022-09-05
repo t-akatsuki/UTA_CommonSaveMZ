@@ -548,7 +548,7 @@ namespace utakata.UTA_CommonSaveMZ {
          * 
          * @remarks
          * 共有セーブデータが存在しない場合は何もしない
-         * 途中から導入した場合を考慮してエラーにしない事
+         * 途中から導入した場合を考慮し、共有セーブデータが存在しなくてもエラーにしない事
          * 
          * @returns ロード処理のpromiseオブジェクト
          */
@@ -752,9 +752,11 @@ namespace utakata.UTA_CommonSaveMZ {
     };
 
     /**
-     * Scene_Gameover
+     * Scene_Gameover.prototype.start
+     * ゲームオーバー時に共有セーブデータのセーブ処理をフック
+     * ゲームオーバー処理が実行されるとタイトル画面に戻ってしまい、
+     * プレイデータが揮発するのでゲームオーバー処理の前に共有セーブデータを保存する
      */
-    // ゲームオーバー時に共有セーブデータのセーブ処理をフック
     const _Scene_Gameover_prototype_start = Scene_Gameover.prototype.start;
     Scene_Gameover.prototype.start = function(): void {
         if (CommonSave.isApplyOnGameover()) {
