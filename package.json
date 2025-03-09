@@ -2,64 +2,19 @@
   "name": "uta_commonsavemz",
   "version": "1.0.0",
   "description": "RPGツクールMZ用「共有セーブデータ」プラグインです。",
-  "main": "",
-  "config": {
-    "PLUGIN_NAME": "UTA_CommonSaveMZ",
-    "PLUGIN_VERSION": "v1.0.0",
-    "DEST_PLUGIN_FILE": "./dest/UTA_CommonSaveMZ.js",
-    "ANNOTATION_FILE": "./src/plugin/plugin-annotation.js"
-  },
-  "directories": {},
-  "scripts": {
-    "clean:dest": "rimraf dest/*",
-    "clean:dist": "rimraf dist/*",
-    "lint": "eslint src/plugin/*.ts --config=.eslintrc.js",
-    "lint:fix": "eslint src/plugin/*.ts --config=.eslintrc.js --fix",
-    "tsc:debug": "cross-conf-env tsc -p tsconfig.json --outFile npm_package_config_DEST_PLUGIN_FILE",
-    "tsc:release": "cross-conf-env tsc -p tsconfig.json --outFile npm_package_config_DEST_PLUGIN_FILE",
-    "concat:plugin-annotation": "cross-conf-env concat -o npm_package_config_DEST_PLUGIN_FILE npm_package_config_ANNOTATION_FILE npm_package_config_DEST_PLUGIN_FILE",
-    "apply-plugin-to-project": "cross-conf-env bash ./tools/apply-plugin-to-project.sh npm_package_config_DEST_PLUGIN_FILE",
-    "build:debug": "run-s clean:dest lint tsc:debug concat:plugin-annotation apply-plugin-to-project",
-    "build:release": "run-s clean:dest lint tsc:release concat:plugin-annotation apply-plugin-to-project",
-    "copy:docs": "cp -f ./src/docs/* ./dist/",
-    "copy:manual": "mkdir -p ./dist/manual && cp -rf ./manual/* ./dist/manual/",
-    "copy:plugin": "mkdir -p ./dist/plugin/ && cross-conf-env cp -f npm_package_config_DEST_PLUGIN_FILE ./dist/plugin/",
-    "preparation": "run-s clean:dist build:release copy:docs copy:manual copy:plugin",
-    "make:package": "cross-conf-env bash ./tools/make-package.sh npm_package_config_PLUGIN_NAME_npm_package_config_PLUGIN_VERSION.zip"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/t-akatsuki/UTA_CommonSaveMZ.git"
-  },
-  "keywords": [
-    "RPGツクール",
-    "RPGツクールMZ",
-    "rpgmaker",
-    "rpgmakermz"
-  ],
   "author": "t-akatsuki",
   "license": "MIT",
+  "private": true,
+  "homepage": "https://www.utakata-no-yume.net",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/t-akatsuki/UTA_CommonSaveMZ"
+  },
   "bugs": {
+    "email": "support@utakata-no-yume.net",
     "url": "https://github.com/t-akatsuki/UTA_CommonSaveMZ/issues"
   },
-  "homepage": "https://www.utakata-no-yume.net",
-  "devDependencies": {
-    "@microsoft/tsdoc": "^0.14.1",
-    "@types/node": "14.14.0",
-    "@types/nw.js": "^0.13.15",
-    "@typescript-eslint/eslint-plugin": "^5.33.0",
-    "@typescript-eslint/parser": "^5.33.0",
-    "@typescript/lib-dom": "file:lib/utakata-rmmz-ts-lib",
-    "concat": "^1.0.3",
-    "cross-conf-env": "^1.3.0",
-    "eslint": "^8.22.0",
-    "eslint-config-prettier": "^8.5.0",
-    "javascript-obfuscator": "^4.0.0",
-    "npm-check-updates": "^16.1.0",
-    "npm-run-all": "^4.1.5",
-    "pixi.js": "5.2.4",
-    "prettier": "^2.7.1",
-    "rimraf": "^3.0.2",
-    "typescript": "^4.7.4"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
