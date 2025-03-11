@@ -1,4 +1,14 @@
 {
     "editor.defaultFormatter": "EditorConfig.EditorConfig",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "eslint.enable": true,
+    "eslint.format.enable": true,
+    "eslint.run": "onType",
+    "eslint.probe": [
+      "javascript"
+    ],
+    "eslint.useESLintClass": true,
+    "eslint.options": {
+      "overrideConfigFile": "eslint.config.mjs"
+    }
 }
