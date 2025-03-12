@@ -562,9 +562,6 @@ export default [
       // /* exported 変数名 */ で例外とする事ができる
       "no-unused-vars": "error",
 
-      // 関数定義の引数括弧の前にスペースを強要しない
-      "space-before-function-paren": "off",
-
       /**
        * ESLint Stylistic rules
        * https://eslint.style/packages/ts#rules
