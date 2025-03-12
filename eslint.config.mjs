@@ -20,10 +20,10 @@ import globals from "globals";
  *   MZ: RPGツクールMZ
  * @type {string.<string, string>}
  */
-const RPG_MAKER_EDITION = {
+const RPG_MAKER_EDITION = Object.freeze({
   "MV": "mv",
   "MZ": "mz",
-};
+});
 
 /**
  * 対象とするRPGツクールのエディション。
@@ -36,7 +36,7 @@ const TARGET_EDITION = RPG_MAKER_EDITION.MZ;
  * RPGMakerMV v1.6.3 core script global objects
  * @type {Object.<string, string>}
  */
-const GLOBAL_CONF_MV = {
+const GLOBAL_CONF_MV = Object.freeze({
   /**
    * plugins.js
    */
@@ -243,14 +243,14 @@ const GLOBAL_CONF_MV = {
    * libs/lz-string.js
    */
   "LZString": true,
-};
+});
 
 /**
  * RPGツクールMZ用globals定義。
  * RPGMaker MZ v1.9.0 core script global objects
  * @type {Object.<string, string>}
  */
-const GLOBAL_CONF_MZ = {
+const GLOBAL_CONF_MZ = Object.freeze({
   // main.js
   "scriptUrls": "readonly",
   "effekseerWasmUrl": "readonly",
@@ -458,7 +458,7 @@ const GLOBAL_CONF_MZ = {
   "PIXI": "readonly",
   // vorbisdecoder.js
   "VorbisDecoderModule": "readonly",
-};
+});
 
 /**
  * 対象エディションに合わせたlanguageOptions設定を取得する。
