@@ -27,6 +27,13 @@ utakata.UTA_CommonSaveMZ = (function() {
     const VERSION = "1.0.0";
 
     /**
+     * プラグイン名称定義。
+     * @constant
+     * @type {string}
+     */
+    const PLUGIN_NAME = "UTA_CommonSaveMZ";
+
+    /**
      * @extends Error
      * @class UTA_CommonSaveError
      * @classdesc UTA_CommonSave関連汎用エラークラス。
@@ -684,6 +691,42 @@ utakata.UTA_CommonSaveMZ = (function() {
         };
 
         return CommonSavePluginParameter;
+    })();
+
+    /**
+     * @static
+     * @class CommonSaveManager
+     * @classdesc 共有セーブ関連の処理を扱う静的クラス。
+     */
+    const CommonSaveManager = (function() {
+        const _logger = Logger.getLogger("CommonSaveManager");
+
+        /**
+         * @constructor
+         */
+        function CommonSaveManager() {
+            throw new Error(`${this.constructor.name} is static class.`);
+        }
+
+        /**
+         * プラグインパラメータのデータ。
+         * @type {CommonSavePluginParameter | null}
+         */
+        CommonSaveManager._parameters = null;
+
+        /**
+         * 初期化処理。
+         * @static
+         */
+        CommonSaveManager.initialize = function() {
+            // プラグインパラメータを取得
+            const parameters = PluginManager.parameters(PLUGIN_NAME);
+            this._parameters = new CommonSavePluginParameter(parameters);
+
+            _logger(Logger.DEBUG, "Initialized.");
+        };
+
+        return CommonSaveManager;
     })();
 
     // 名前空間越しにアクセス可能なプロパティの定義
