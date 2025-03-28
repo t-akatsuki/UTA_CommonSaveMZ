@@ -474,10 +474,6 @@ function getLanguageOptions() {
     "globals": {
       ...globals.browser,
       ...globals.node,
-      /**
-       * utakata plugin namespace
-       */
-      "utakata": "writable",
     },
   };
 
