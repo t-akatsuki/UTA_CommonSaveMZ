@@ -1,5 +1,6 @@
 node_modules
 rmmz-project/*
+.vscode/tasks.json
 dest/*
 dist/*
 UTA_*.zip
