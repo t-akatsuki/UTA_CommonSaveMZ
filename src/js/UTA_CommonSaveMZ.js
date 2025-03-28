@@ -731,8 +731,26 @@ utakata.UTA_CommonSaveMZ = (function() {
 
     // 名前空間越しにアクセス可能なプロパティの定義
     const exports = {
-        VERSION: VERSION
+        VERSION: VERSION,
+        CommonSaveManager: CommonSaveManager,
+        UTA_CommonSaveError: UTA_CommonSaveError
     };
 
     return exports;
+})();
+
+// ------------------------------------------------------------------
+// コアスクリプト各種メソッドの拡張
+// ------------------------------------------------------------------
+(function() {
+    /**
+     * Scene_Boot
+     */
+    // ゲームの初期化タイミングでデータベース読み込みに合わせて初期化を行う
+    const Scene_Boot__prototype__onDatabaseLoaded = Scene_Boot.prototype.onDatabaseLoaded;
+    Scene_Boot.prototype.onDatabaseLoaded = function() {
+        Scene_Boot__prototype__onDatabaseLoaded.call(this);
+
+        utakata.UTA_CommonSaveMZ.CommonSaveManager.initialize();
+    };
 })();
