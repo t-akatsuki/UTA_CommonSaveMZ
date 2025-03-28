@@ -26,6 +26,16 @@ utakata.UTA_CommonSaveMZ = (function() {
      */
     const VERSION = "1.0.0";
 
+    /**
+     * @extends Error
+     * @class UTA_CommonSaveError
+     * @classdesc UTA_CommonSave関連汎用エラークラス。
+     */
+    class UTA_CommonSaveError extends Error {
+        constructor(...args) {
+            super(...args);
+        }
+    }
 
     // 名前空間越しにアクセス可能なプロパティの定義
     const exports = {
