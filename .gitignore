@@ -1,5 +1,6 @@
 node_modules
 rmmz-project/*
+dest/*
 dist/*
 UTA_*.zip
 !.gitkeep
