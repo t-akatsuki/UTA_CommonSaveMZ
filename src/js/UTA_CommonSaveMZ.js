@@ -923,15 +923,15 @@ utakata.UTA_CommonSaveMZ = (function() {
         CommonSavePluginParameter.prototype._parseBoolean = function(targetStr) {
             let ret = false;
             switch (targetStr.toLowerCase()) {
-            case "true":
-                ret = true;
-                break;
-            case "false":
-                ret = false;
-                break;
-            default:
-                _logger(Logger.ERROR, `_parseBoolean: Failed to parse target boolean string. (${targetStr})`);
-                throw new UTA_CommonSavePluginParameterError(`Parse error: Invalid format (${targetStr})`);
+                case "true":
+                    ret = true;
+                    break;
+                case "false":
+                    ret = false;
+                    break;
+                default:
+                    _logger(Logger.ERROR, `_parseBoolean: Failed to parse target boolean string. (${targetStr})`);
+                    throw new UTA_CommonSavePluginParameterError(`Parse error: Invalid format (${targetStr})`);
             }
             return ret;
         };

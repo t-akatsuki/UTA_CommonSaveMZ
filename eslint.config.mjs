@@ -572,10 +572,13 @@ export default [
       ],
       // 小数における省略記法を認めない
       "@stylistic/js/no-floating-decimal": "error",
-      // インデントのスペース数
+      // インデントのスペース数制約
       "@stylistic/js/indent": [
         "error",
         4,
+        {
+          "SwitchCase": 1,
+        }
       ],
       // ifなどのキーワードの前後にスペースを入れる
       "@stylistic/js/keyword-spacing": [
