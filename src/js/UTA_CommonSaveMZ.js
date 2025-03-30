@@ -1092,7 +1092,27 @@ utakata.UTA_CommonSaveMZ = (function() {
             const saveName = this._parameters.saveFileName;
             return StorageManager.exists(saveName);
         };
+
+        /**
+         * 現在のゲームデータから共有セーブデータを作成して保存する。  
+         * セーブ時のバックアップはStorageManager.saveObjectメソッドの流れで行われている為、独自に実装しない。
+         * @static
+         * @private
+         * @return {Promise<number>} StorageManager.saveObjectから続くPromise。
+         */
         CommonSaveManager._save = function() {
+            const saveName = this._parameters.saveFileName;
+
+            const targetSwitches = this._parameters.targetSwitches;
+            const targetVariables = this._parameters.targetVariables;
+
+            const commonSaveData = CommonSaveData.fromCurrentGameData(targetSwitches, targetVariables);
+            const contents = commonSaveData.makeSaveContents();
+
+            return StorageManager.saveObject(saveName, contents).then(() => {
+                _logger(Logger.INFO, `_save: Succeeded to save common save data. (filename=${saveName})`);
+                return 0;
+            });
         };
         CommonSaveManager._remove = function() {
 
