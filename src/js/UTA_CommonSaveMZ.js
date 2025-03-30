@@ -940,6 +940,114 @@ utakata.UTA_CommonSaveMZ = (function() {
     })();
 
     /**
+     * @class CommonSaveData
+     * @classdesc 共有セーブデータを扱うクラス。
+     */
+    const CommonSaveData = (function() {
+        const _logger = Logger.getLogger("CommonSaveData");
+
+        /**
+         * @constructor
+         * @param {Version} version バージョン。
+         * @param {Object.<number, number>} gameSwitches 共有対象スイッチ情報の連想配列。
+         * @param {Object.<number, number>} gameVariables 共有対象変数情報の連想配列。
+         */
+        function CommonSaveData(version, gameSwitches = {}, gameVariables = {}) {
+            /**
+             * @type {Version} バージョン。
+             */
+            this.version = version;
+            /**
+             * @type {Object.<number, number>} 共有対象スイッチ情報。
+             */
+            this.gameSwitches = Object.assign({}, gameSwitches);
+            /**
+             * @type {Object.<number, number>} 共有対象変数情報。
+             */
+            this.gameVariables = Object.assign({}, gameVariables);
+        }
+
+        /**
+         * セーブデータ格納用の連想配列を作成する。
+         * @return {Object<string, any>}
+         */
+        CommonSaveData.prototype.makeSaveContents = function() {
+            const contents = {
+                version: this.version.getVersionDict(),
+                gameSwitches: this.gameSwitches,
+                gameVariables: this.gameVariables
+            };
+            return contents;
+        };
+
+        /**
+         * 共有セーブデータ連想配列からCommonSaveDataインスタンスを作成する。
+         * @static
+         * @param {Object} contents 共有セーブデータ連想配列。
+         * @return {CommonSaveData}
+         */
+        CommonSaveData.fromSaveContents = function(contents) {
+            // バージョンのβ版データ構造の違いはVersion.fromDict側で吸収される
+            const version = Version.fromDict(contents.version);
+            return new this(version, contents.gameSwitches, contents.gameVariables);
+        };
+
+        /**
+         * 現在のゲームデータの状態から共有セーブデータを作成する。
+         * @static
+         * @param {number[]} targetSwitches 共有対象スイッチ番号の配列。
+         * @param {number[]} targetVariables 共有対象変数番号の配列。
+         * @return {CommonSaveData}
+         */
+        CommonSaveData.fromCurrentGameData = function(targetSwitches, targetVariables) {
+            const version = Version.fromString(VERSION);
+            const gameSwitches = this.makeGameSwitchesJson(targetSwitches);
+            const gameVariables = this.makeGameVariablesJson(targetVariables);
+            return new this(version, gameSwitches, gameVariables);
+        };
+
+        /**
+         * 現在のゲームデータの状態から引数に渡した対象スイッチの共有セーブデータ格納用連想配列を取得する。
+         * @static
+         * @param {number[]} targetSwitches 共有対象スイッチ番号の配列。
+         * @return {Object.<number, boolean>} 共有セーブデータ格納用のスイッチ情報連想配列。
+         */
+        CommonSaveData.makeGameSwitchesJson = function(targetSwitches) {
+            const ret = {};
+            for (const idx of targetSwitches) {
+                // 範囲外の場合は無視する
+                if (idx < 1 || idx > $dataSystem.switches.length - 1) {
+                    _logger(Logger.WARN, `makeGameSwitchesJson: Ignore switch target. Invalid switch id. (${idx})`);
+                    continue;
+                }
+                ret[idx] = $gameSwitches.value(idx);
+            }
+            return ret;
+        };
+
+        /**
+         * 現在のゲームデータから引数に渡した対象変数の共有セーブデータ格納用連想配列を取得する。
+         * @static
+         * @param {number[]} targetVariables 共有対象変数番号の配列。
+         * @return {Object.<number, number>} 共有セーブデータ格納用の変数情報連想配列。
+         */
+        CommonSaveData.makeGameVariablesJson = function(targetVariables) {
+            const ret = {};
+            for (const idx of targetVariables) {
+                // 範囲外の場合は無視する
+                if (idx < 1 || idx > $dataSystem.switches.length - 1) {
+                    _logger(Logger.WARN, `makeGameVariablesJson: Ignore variable target. Invalid variable id. (${idx})`);
+                    continue;
+                }
+                ret[idx] = $gameVariables.value(idx);
+            }
+            return ret;
+        };
+
+        return CommonSaveData;
+    })();
+
+    /**
      * @static
      * @class CommonSaveManager
      * @classdesc 共有セーブ関連の処理を扱う静的クラス。
