@@ -973,9 +973,80 @@ utakata.UTA_CommonSaveMZ = (function() {
 
             _logger(Logger.DEBUG, "Initialized.");
         };
+        CommonSaveManager._save = function() {
+        };
+        CommonSaveManager._remove = function() {
+
+        };
+        CommonSaveManager._check = function() {
+
+        };
+
+        /**
+         * プラグインコマンドの実行。
+         * @param {string} command プラグインコマンド名。
+         * @throws {UTA_CommonSaveError} 無効なプラグインコマンドが指定された場合に送出。
+         */
+        CommonSaveManager.dispatchPluginCommand = function(command) {
+            _logger(Logger.DEBUG, `dispatchPluginCommand: call plugin command "${command}".`);
+
+            switch (command) {
+                case "load":
+                    this._load();
+                    break;
+                case "save":
+                    this._save();
+                    break;
+                case "remove":
+                    this._remove();
+                    break;
+                case "check":
+                    this._check();
+                    break;
+                default:
+                    throw new UTA_CommonSaveError(`Invalid plugin command. (${command})`);
+            }
+        };
 
         return CommonSaveManager;
     })();
+
+    /**
+     * プラグインコマンドを登録し、プラグインマネージャーから呼び出せるようにする。
+     * @function registerPluginCommands
+     */
+    function registerPluginCommands() {
+        /**
+         * UTA_CommonSaveMZ load
+         */
+        PluginManager.registerCommand(PLUGIN_NAME, "load", () => {
+            CommonSaveManager.dispatchPluginCommand("load");
+        });
+
+        /**
+         * UTA_CommonSaveMZ save
+         */
+        PluginManager.registerCommand(PLUGIN_NAME, "save", () => {
+            CommonSaveManager.dispatchPluginCommand("save");
+        });
+
+        /**
+         * UTA_CommonSaveMZ remove
+         */
+        PluginManager.registerCommand(PLUGIN_NAME, "remove", () => {
+            CommonSaveManager.dispatchPluginCommand("remove");
+        });
+
+        /**
+         * UTA_CommonSaveMZ check
+         */
+        PluginManager.registerCommand(PLUGIN_NAME, "check", () => {
+            CommonSaveManager.dispatchPluginCommand("check");
+        });
+    }
+
+    // プラグインコマンド登録の実行
+    registerPluginCommands();
 
     // 名前空間越しにアクセス可能なプロパティの定義
     const exports = {
