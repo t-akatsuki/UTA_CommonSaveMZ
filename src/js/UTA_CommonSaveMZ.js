@@ -554,6 +554,7 @@ utakata.UTA_CommonSaveMZ = (function() {
 
         /**
          * バージョン文字列からバージョンインスタンスを得る。
+         * @static
          * @param {string} versionStr バージョン文字列。
          * @return {Version} バージョンインスタンス。
          */
@@ -572,6 +573,23 @@ utakata.UTA_CommonSaveMZ = (function() {
             }
 
             return version;
+        };
+
+        /**
+         * バージョン値連想配列からバージョンインスタンスを得る。
+         * @static
+         * @param {Object.<string, number>} versionDict バージョン値連想配列。
+         * @return {Version} Versionインスタンス。
+         */
+        Version.fromDict = function(versionDict) {
+            const major = versionDict["major"];
+            const minor = versionDict["minor"];
+
+            // v0.9.1以下のバージョンの場合は構造が異なる
+            const patchKey = Object.keys(versionDict).indexOf("release") >= 0 ? "release" : "patch";
+            const patch = versionDict[patchKey];
+
+            return new this(major, minor, patch);
         };
 
         return Version;
