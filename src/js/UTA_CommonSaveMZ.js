@@ -973,6 +973,17 @@ utakata.UTA_CommonSaveMZ = (function() {
 
             _logger(Logger.DEBUG, "Initialized.");
         };
+
+        /**
+         * 共有セーブデータが存在するかを返す。  
+         * 同期的に実行される。
+         * @static
+         * @return {boolean} 共有セーブデータが存在する場合はtrueを返す。
+         */
+        CommonSaveManager._exists = function() {
+            const saveName = this._parameters.saveFileName;
+            return StorageManager.exists(saveName);
+        };
         CommonSaveManager._save = function() {
         };
         CommonSaveManager._remove = function() {
