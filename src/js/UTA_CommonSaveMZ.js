@@ -604,9 +604,9 @@ utakata.UTA_CommonSaveMZ = (function() {
 
         /**
          * @constructor
-         * @param {Object.<string, string>} parameters プラグインパラメータデータ。
+         * @param {Object.<string, string> | null} parameters プラグインパラメータデータ。
          */
-        function CommonSavePluginParameter(parameters) {
+        function CommonSavePluginParameter(parameters = null) {
             /**
              * 共有対象のスイッチ番号。
              * @type {number[]}
@@ -663,7 +663,9 @@ utakata.UTA_CommonSaveMZ = (function() {
             this.logLevel = Logger.INFO;
 
             // プラグインパラメータのparse
-            this._parse(parameters);
+            if (parameters) {
+                this.parse(parameters);
+            }
         }
 
         /**
@@ -680,10 +682,9 @@ utakata.UTA_CommonSaveMZ = (function() {
 
         /**
          * プラグインパラメータを期待する型のデータにparseしてインスタンス変数に保存する。
-         * @private
          * @param {Object.<string, string>} parameters プラグインパラメータデータ。
          */
-        CommonSavePluginParameter.prototype._parse = function(parameters) {
+        CommonSavePluginParameter.prototype.parse = function(parameters) {
             /**
              * targetSwitches: string[] -> number[]
              */
@@ -955,9 +956,11 @@ utakata.UTA_CommonSaveMZ = (function() {
 
         /**
          * プラグインパラメータのデータ。
-         * @type {CommonSavePluginParameter | null}
+         * @static
+         * @private
+         * @type {CommonSavePluginParameter}
          */
-        CommonSaveManager._parameters = null;
+        CommonSaveManager._parameters = new CommonSavePluginParameter();
 
         /**
          * 初期化処理。
@@ -966,7 +969,7 @@ utakata.UTA_CommonSaveMZ = (function() {
         CommonSaveManager.initialize = function() {
             // プラグインパラメータを取得
             const parameters = PluginManager.parameters(PLUGIN_NAME);
-            this._parameters = new CommonSavePluginParameter(parameters);
+            this._parameters.parse(parameters);
 
             _logger(Logger.DEBUG, "Initialized.");
         };
