@@ -1104,6 +1104,108 @@ utakata.UTA_CommonSaveMZ = (function() {
         };
 
         /**
+         * 共有セーブデータから$gameSwitchesにデータを反映する。
+         * @static
+         * @param {CommonSaveData} commonSaveData 共有セーブデータ。
+         * @throws {UTA_CommonSaveError} 読み込み・適用失敗時に送出される。
+         */
+        CommonSaveManager._applyToGameSwitches = function(commonSaveData) {
+            const savedGameSwitches = commonSaveData.gameSwitches;
+            try {
+                Object.keys(savedGameSwitches).forEach((key) => {
+                    const idx = parseInt(key, 10);
+                    if (idx !== idx) {
+                        throw new Error(`switch number has been parsed to NaN (${key})`);
+                    }
+
+                    // 後から対象を減らした場合に意図しない反映がなされる可能性がある為、
+                    // 現在の共有対象のみを反映する
+                    if (this._parameters.targetSwitches.indexOf(idx) < 0) {
+                        return;
+                    }
+
+                    const value = savedGameSwitches[key];
+                    $gameSwitches.setValue(idx, value);
+                }, this);
+            } catch (e) {
+                _logger(Logger.ERROR, `Failed to apply game switches from common save data.`);
+                _logger(Logger.ERROR, `${e}`);
+                throw new UTA_CommonSaveError(`Common save appling error `);
+            }
+        };
+
+        /**
+         * 共有セーブデータから$gameVariablesにデータを反映する。
+         * @param {CommonSaveData} commonSaveData 共有セーブデータ。
+         * @throws {UTA_CommonSaveError} 読み込み・適用失敗時に送出される。
+         */
+        CommonSaveManager._applyToGameVariables = function(commonSaveData) {
+            const savedGameVariables = commonSaveData.gameVariables;
+            try {
+                Object.keys(savedGameVariables).forEach((key) => {
+                    const idx = parseInt(key, 10);
+                    if (idx !== idx) {
+                        throw new Error(`variable number has been parsed to NaN (${key})`);
+                    }
+
+                    // 後から対象を減らした場合に意図しない反映がなされる可能性がある為、
+                    // 現在の共有対象のみを反映する
+                    if (this._parameters.targetVariables.indexOf(idx) < 0) {
+                        return;
+                    }
+
+                    const value = savedGameVariables[key];
+                    $gameVariables.setValue(idx, value);
+                }, this);
+            } catch (e) {
+                const errMessage = Object.prototype.hasOwnProperty.call(e, "message") ? e.message : "";
+                _logger(Logger.ERROR, `Failed to apply game variables from common save data.`);
+                _logger(Logger.ERROR, `error message: \n${errMessage}`);
+                throw new UTA_CommonSaveError(`Common save appling error (${errMessage})`);
+            }
+        };
+
+        /**
+         * 共有セーブデータのロード処理のコア部分。  
+         * セーブデータバージョンによる差異の吸収などを担う。
+         * @static
+         * @param {Object} contents 共有セーブデータからロードした連想配列。
+         */
+        CommonSaveManager._loadCore = function(contents) {
+            const commonSaveData = CommonSaveData.fromSaveContents(contents);
+
+            /**
+             * 各種データをゲーム状態に反映する
+             */
+            this._applyToGameSwitches(commonSaveData);
+            this._applyToGameVariables(commonSaveData);
+        };
+
+        /**
+         * 共有セーブデータをロードする。
+         * @static
+         * @return {Promise<number>} StorageManager.saveObjectから続くロード処理のPromise。
+         */
+        CommonSaveManager._load = function() {
+            const saveName = this._parameters.saveFileName;
+            _logger(Logger.DEBUG, `_load: target save name = ${saveName}`);
+
+            // セーブデータが存在しない場合は何もしない
+            if (!this._exists()) {
+                return new Promise((resolve) => {
+                    _logger(Logger.INFO, `_load: Common save data is not existed. (${saveName})`);
+                    resolve(0);
+                });
+            }
+
+            return StorageManager.loadObject(saveName).then((contents) => {
+                this._loadCore(contents);
+                _logger(Logger.INFO, `_load: Loading common save data succeeded. (${saveName})`);
+                return 0;
+            });
+        };
+
+        /**
          * 現在のゲームデータから共有セーブデータを作成して保存する。  
          * セーブ時のバックアップはStorageManager.saveObjectメソッドの流れで行われている為、独自に実装しない。
          * @static
