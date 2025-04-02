@@ -1086,6 +1086,9 @@ utakata.UTA_CommonSaveMZ = (function() {
             const parameters = PluginManager.parameters(PLUGIN_NAME);
             this._parameters.parse(parameters);
 
+            // プラグインパラメータで指定したログレベルをセット
+            Logger.setLogLevel(this._parameters.logLevel);
+
             _logger(Logger.DEBUG, "Initialized.");
         };
 
