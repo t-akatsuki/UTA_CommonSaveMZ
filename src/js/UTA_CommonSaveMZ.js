@@ -416,7 +416,10 @@ utakata.UTA_CommonSaveMZ = (function() {
                     if (prefix) {
                         messages.unshift(`${prefix}:`);
                     }
-                    console[type](...messages);
+
+                    // Chromiumにてconsole.debugは期待する出力を行わないのでconsole.infoで代替する
+                    const method = type === _this.DEBUG ? this.INFO : type;
+                    console[method](...messages);
                 };
             }
 
