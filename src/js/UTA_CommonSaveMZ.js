@@ -347,11 +347,15 @@ utakata.UTA_CommonSaveMZ = (function() {
         /**
          * ログレベルの定義。
          * @static
-         * @type {readonly string[]}
+         * @readonly
+         * @type {string[]}
          */
-        Logger.LOG_LEVELS = Object.freeze([
-            Logger.ERROR, Logger.WARN, Logger.INFO, Logger.LOG, Logger.DEBUG
-        ]);
+        Object.defineProperty(Logger, "LOG_LEVELS", {
+            value: Object.freeze([
+                Logger.ERROR, Logger.WARN, Logger.INFO, Logger.LOG, Logger.DEBUG
+            ]),
+            writable: false
+        });
 
         /**
          * デフォルトログレベル。
