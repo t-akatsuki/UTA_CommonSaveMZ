@@ -1126,9 +1126,16 @@ utakata.UTA_CommonSaveMZ = (function() {
         };
         CommonSaveManager._remove = function() {
 
-        };
+        /**
+         * 現在共有対象としているスイッチ/変数番号をコンソールに表示する。  
+         * デバッグ用機能の為、ログレベルがDEBUGの時のみ表示される。
+         * @static
+         */
         CommonSaveManager._check = function() {
-
+            const targetSwitchesStr = this._parameters.targetSwitches.join(",");
+            const targetVariablesStr = this._parameters.targetVariables.join(",");
+            _logger(Logger.DEBUG, `Common save target switches number: \n${targetSwitchesStr}`);
+            _logger(Logger.DEBUG, `Common save target variables number: \n${targetVariablesStr}`);
         };
 
         /**
