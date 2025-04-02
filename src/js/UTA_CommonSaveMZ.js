@@ -568,11 +568,11 @@ utakata.UTA_CommonSaveMZ = (function() {
         Version.fromString = function(versionStr) {
             let version = null;
             try {
-                const versionStrList = versionStr.split(Version.SEPARATOR);
+                const versionStrList = versionStr.split(Version.SEPARATOR).map((s) => { return parseInt(s, 10); });
                 if (versionStrList.length !== 3) {
                     throw new TypeError(`Version string invalid format.`);
                 }
-                version = this(...versionStrList);
+                version = new this(...versionStrList);
             } catch (e) {
                 _logger(Logger.ERROR, `fromString: Version string parse error. (versionStr = ${versionStr})`);
                 _logger(Logger.ERROR, e);
