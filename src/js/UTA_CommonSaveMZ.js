@@ -414,7 +414,7 @@ utakata.UTA_CommonSaveMZ = (function() {
                         return;
                     }
                     if (prefix) {
-                        messages.unshift(`${prefix}: `);
+                        messages.unshift(`${prefix}:`);
                     }
                     console[type](...messages);
                 };
