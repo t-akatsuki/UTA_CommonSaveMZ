@@ -1124,7 +1124,26 @@ utakata.UTA_CommonSaveMZ = (function() {
                 return 0;
             });
         };
+
+        /**
+         * 共有セーブデータを削除する。  
+         * 同期的に実行される。  
+         * 共有セーブデータが存在しない場合は何もしない。
+         * @static
+         */
         CommonSaveManager._remove = function() {
+            if (!this._exists()) {
+                _logger(Logger.INFO, `_remove: Common save data is not existed.`);
+                return;
+            }
+
+            const saveName = this._parameters.saveFileName;
+            _logger(Logger.DEBUG, `_remove: target save name = ${saveName}`);
+
+            StorageManager.remove(saveName);
+
+            _logger(Logger.INFO, `_remove: Succeeded to remove common save data. (filename=${saveName})`);
+        };
 
         /**
          * 現在共有対象としているスイッチ/変数番号をコンソールに表示する。  
