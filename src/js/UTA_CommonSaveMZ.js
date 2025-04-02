@@ -804,7 +804,6 @@ utakata.UTA_CommonSaveMZ = (function() {
             try {
                 targetVariablesNumberList = this._getTargetNumberList(targetVariables);
             } catch (e) {
-
                 const errMessage = Object.prototype.hasOwnProperty.call(e, "message") ? e.message : "";
                 _logger(Logger.ERROR, `_parseTargetVariabllesNumber: Failed to parse target variables number.`);
                 _logger(Logger.ERROR, `Error message: \n${errMessage}`);
@@ -843,8 +842,9 @@ utakata.UTA_CommonSaveMZ = (function() {
             try {
                 targetList = JSON.parse(targetListStr);
             } catch (e) {
+                const errMessage = Object.prototype.hasOwnProperty.call(e, "message") ? e.message : "";
                 _logger(Logger.ERROR, `_getTargetNumberList: Failed to parse target number json string. (${targetListStr})`);
-                _logger(Logger.ERROR, e);
+                _logger(Logger.ERROR, `error message: \n${errMessage}`);
                 throw new UTA_CommonSavePluginParameterError(`Parse error: json parse error`);
             }
 
@@ -913,8 +913,9 @@ utakata.UTA_CommonSaveMZ = (function() {
                     throw new UTA_CommonSavePluginParameterError(`Parse error: Invalid format (${targetStr})`);
                 }
             } catch (e) {
+                const errMessage = Object.prototype.hasOwnProperty.call(e, "message") ? e.message : "";
                 _logger(Logger.ERROR, `_parseTargetNumber: Failed to parse target number. (${targetStr})`);
-                _logger(Logger.ERROR, e);
+                _logger(Logger.ERROR, `error message: \n${errMessage}`);
                 throw e;
             }
 
@@ -1214,6 +1215,7 @@ utakata.UTA_CommonSaveMZ = (function() {
          */
         CommonSaveManager._save = function() {
             const saveName = this._parameters.saveFileName;
+            _logger(Logger.DEBUG, `_save: target save name = ${saveName}`);
 
             const targetSwitches = this._parameters.targetSwitches;
             const targetVariables = this._parameters.targetVariables;
@@ -1265,7 +1267,7 @@ utakata.UTA_CommonSaveMZ = (function() {
          * @throws {UTA_CommonSaveError} 無効なプラグインコマンドが指定された場合に送出。
          */
         CommonSaveManager.dispatchPluginCommand = function(command) {
-            _logger(Logger.DEBUG, `dispatchPluginCommand: call plugin command "${command}".`);
+            _logger(Logger.DEBUG, `dispatchPluginCommand: Call plugin command "${command}".`);
 
             switch (command) {
                 case "load":
