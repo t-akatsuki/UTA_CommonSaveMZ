@@ -1112,7 +1112,7 @@ utakata.UTA_CommonSaveMZ = (function() {
          * @static
          * @return {boolean} 共有セーブデータが存在する場合はtrueを返す。
          */
-        CommonSaveManager._exists = function() {
+        CommonSaveManager.exists = function() {
             const saveName = this._parameters.saveFileName;
             return StorageManager.exists(saveName);
         };
@@ -1201,21 +1201,21 @@ utakata.UTA_CommonSaveMZ = (function() {
          * @static
          * @return {Promise<number>} StorageManager.saveObjectから続くロード処理のPromise。
          */
-        CommonSaveManager._load = function() {
+        CommonSaveManager.load = function() {
             const saveName = this._parameters.saveFileName;
-            _logger(Logger.DEBUG, `_load: target save name = ${saveName}`);
+            _logger(Logger.DEBUG, `load: target save name = ${saveName}`);
 
             // セーブデータが存在しない場合は何もしない
-            if (!this._exists()) {
+            if (!this.exists()) {
                 return new Promise((resolve) => {
-                    _logger(Logger.INFO, `_load: Common save data is not existed. (${saveName})`);
+                    _logger(Logger.INFO, `load: Common save data is not existed. (${saveName})`);
                     resolve(0);
                 });
             }
 
             return StorageManager.loadObject(saveName).then((contents) => {
                 this._loadCore(contents);
-                _logger(Logger.INFO, `_load: Loading common save data succeeded. (${saveName})`);
+                _logger(Logger.INFO, `load: Loading common save data succeeded. (${saveName})`);
                 return 0;
             });
         };
@@ -1226,9 +1226,9 @@ utakata.UTA_CommonSaveMZ = (function() {
          * @static
          * @return {Promise<number>} StorageManager.saveObjectから続くPromise。
          */
-        CommonSaveManager._save = function() {
+        CommonSaveManager.save = function() {
             const saveName = this._parameters.saveFileName;
-            _logger(Logger.DEBUG, `_save: target save name = ${saveName}`);
+            _logger(Logger.DEBUG, `save: target save name = ${saveName}`);
 
             const targetSwitches = this._parameters.targetSwitches;
             const targetVariables = this._parameters.targetVariables;
@@ -1237,7 +1237,7 @@ utakata.UTA_CommonSaveMZ = (function() {
             const contents = commonSaveData.makeSaveContents();
 
             return StorageManager.saveObject(saveName, contents).then(() => {
-                _logger(Logger.INFO, `_save: Succeeded to save common save data. (filename=${saveName})`);
+                _logger(Logger.INFO, `save: Succeeded to save common save data. (filename=${saveName})`);
                 return 0;
             });
         };
@@ -1248,18 +1248,18 @@ utakata.UTA_CommonSaveMZ = (function() {
          * 共有セーブデータが存在しない場合は何もしない。
          * @static
          */
-        CommonSaveManager._remove = function() {
-            if (!this._exists()) {
-                _logger(Logger.INFO, `_remove: Common save data is not existed.`);
+        CommonSaveManager.remove = function() {
+            if (!this.exists()) {
+                _logger(Logger.INFO, `remove: Common save data is not existed.`);
                 return;
             }
 
             const saveName = this._parameters.saveFileName;
-            _logger(Logger.DEBUG, `_remove: target save name = ${saveName}`);
+            _logger(Logger.DEBUG, `remove: target save name = ${saveName}`);
 
             StorageManager.remove(saveName);
 
-            _logger(Logger.INFO, `_remove: Succeeded to remove common save data. (filename=${saveName})`);
+            _logger(Logger.INFO, `remove: Succeeded to remove common save data. (filename=${saveName})`);
         };
 
         /**
@@ -1267,7 +1267,7 @@ utakata.UTA_CommonSaveMZ = (function() {
          * デバッグ用機能の為、ログレベルがDEBUGの時のみ表示される。
          * @static
          */
-        CommonSaveManager._check = function() {
+        CommonSaveManager.check = function() {
             const targetSwitchesStr = this._parameters.targetSwitches.join(",");
             const targetVariablesStr = this._parameters.targetVariables.join(",");
             _logger(Logger.DEBUG, `Common save target switches number: \n${targetSwitchesStr}`);
@@ -1285,16 +1285,16 @@ utakata.UTA_CommonSaveMZ = (function() {
 
             switch (command) {
                 case "load":
-                    this._load();
+                    this.load();
                     break;
                 case "save":
-                    this._save();
+                    this.save();
                     break;
                 case "remove":
-                    this._remove();
+                    this.remove();
                     break;
                 case "check":
-                    this._check();
+                    this.check();
                     break;
                 default:
                     throw new UTA_CommonSaveError(`Invalid plugin command. (${command})`);
