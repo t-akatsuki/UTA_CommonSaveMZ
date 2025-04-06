@@ -304,7 +304,7 @@ utakata.UTA_CommonSaveMZ = (function() {
      * @class Logger
      * @classdesc Loggerを扱う静的クラス。
      */
-    const Logger = (function() {
+    var Logger = (function() {
         /**
          * @constructor
          */
@@ -451,7 +451,7 @@ utakata.UTA_CommonSaveMZ = (function() {
      * @class Version
      * @classdesc セマンティックバージョニング2.0.0形式のバージョンを扱うクラス。
      */
-    const Version = (function() {
+    var Version = (function() {
         const _logger = Logger.getLogger("Version");
 
         /**
@@ -624,7 +624,7 @@ utakata.UTA_CommonSaveMZ = (function() {
      * @class CommonSavePluginParameter
      * @classdesc UTA_CommonSaveMZプラグインのプラグインパラメータを扱うクラス。
      */
-    const CommonSavePluginParameter = (function() {
+    var CommonSavePluginParameter = (function() {
         const _logger = Logger.getLogger("CommonSavePluginParameter");
 
         /**
@@ -969,7 +969,7 @@ utakata.UTA_CommonSaveMZ = (function() {
      * @class CommonSaveData
      * @classdesc 共有セーブデータを扱うクラス。
      */
-    const CommonSaveData = (function() {
+    var CommonSaveData = (function() {
         const _logger = Logger.getLogger("CommonSaveData");
 
         /**
@@ -1078,7 +1078,7 @@ utakata.UTA_CommonSaveMZ = (function() {
      * @class CommonSaveManager
      * @classdesc 共有セーブ関連の処理を扱う静的クラス。
      */
-    const CommonSaveManager = (function() {
+    var CommonSaveManager = (function() {
         const _logger = Logger.getLogger("CommonSaveManager");
 
         /**
