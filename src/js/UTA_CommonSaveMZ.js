@@ -265,24 +265,42 @@ utakata.UTA_CommonSaveMZ = (function() {
      * @class UTA_CommonSaveError
      * @classdesc UTA_CommonSave関連汎用エラークラス。
      */
-    class UTA_CommonSaveError extends Error {
-        constructor(...args) {
-            super(...args);
+    var UTA_CommonSaveError = (function() {
+        /**
+         * @constructor
+         * @param  {...any} args 
+         */
+        function UTA_CommonSaveError(...args) {
+            Error.apply(this, ...args);
         }
-    }
+
+        // extends Error class
+        UTA_CommonSaveError.prototype = Object.create(Error.prototype);
+        UTA_CommonSaveError.prototype.constructor = UTA_CommonSaveError;
+
+        return UTA_CommonSaveError;
+    })();
 
     /**
      * @extends UTA_CommonSaveError
      * @class UTA_CommonSavePluginParameterError
      * @classdesc UTA_CommonSaveプラグインパラメータ関連エラークラス。
      */
-    class UTA_CommonSavePluginParameterError extends UTA_CommonSaveError {
-        constructor(...args) {
-            super(...args);
+    var UTA_CommonSavePluginParameterError = (function() {
+
+        function UTA_CommonSavePluginParameterError(...args) {
+            Error.apply(this, args);
         }
-    }
+
+        // extends Error class
+        UTA_CommonSavePluginParameterError.prototype = Object.create(Error.prototype);
+        UTA_CommonSavePluginParameterError.prototype.constructor = UTA_CommonSavePluginParameterError;
+
+        return UTA_CommonSavePluginParameterError;
+    })();
 
     /**
+     * @static
      * @class Logger
      * @classdesc Loggerを扱う静的クラス。
      */
