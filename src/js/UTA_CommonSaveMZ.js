@@ -315,7 +315,7 @@ utakata.UTA_CommonSaveMZ = (function() {
         /**
          * @static
          * @readonly
-         * @property {string} ERRORログレベル。
+         * @type {string} ERRORログレベル。
          */
         Object.defineProperty(Logger, "ERROR", {
             value: "error",
@@ -325,7 +325,7 @@ utakata.UTA_CommonSaveMZ = (function() {
         /**
          * @static
          * @readonly
-         * @property {string} WARNログレベル。
+         * @type {string} WARNログレベル。
          */
         Object.defineProperty(Logger, "WARN", {
             value: "warn",
@@ -335,7 +335,7 @@ utakata.UTA_CommonSaveMZ = (function() {
         /**
          * @static
          * @readonly
-         * @property {string} INFOログレベル。
+         * @type {string} INFOログレベル。
          */
         Object.defineProperty(Logger, "INFO", {
             value: "info",
@@ -345,7 +345,7 @@ utakata.UTA_CommonSaveMZ = (function() {
         /**
          * @static
          * @readonly
-         * @property {string} LOGログレベル。
+         * @type {string} LOGログレベル。
          */
         Object.defineProperty(Logger, "LOG", {
             value: "log",
@@ -355,7 +355,7 @@ utakata.UTA_CommonSaveMZ = (function() {
         /**
          * @static
          * @readonly
-         * @property {string} DEBUGログレベル。
+         * @type {string} DEBUGログレベル。
          */
         Object.defineProperty(Logger, "DEBUG", {
             value: "debug",
@@ -777,7 +777,6 @@ utakata.UTA_CommonSaveMZ = (function() {
 
         /**
          * プラグインパラメータで指定された対象番号リスト文字列から、共有対象スイッチ番号の数値リストを得る。
-         * @private
          * @param {string} targetSwitches 読み込み対象のスイッチ番号リスト文字列。文字列である事に注意。
          *                                プラグインパラメータで指定したスイッチ番号の配列をjson文字列化したもの。
          * @return {number[]} 共有対象スイッチ番号の数値リスト。
@@ -811,7 +810,6 @@ utakata.UTA_CommonSaveMZ = (function() {
 
         /**
          * プラグインパラメータで指定された対象番号リスト文字列から、共有対象変数番号の数値リストを得る。
-         * @private
          * @param {string} targetVariables 読み込み対象の変数番号リスト文字列。文字列である事に注意。
          *                                 プラグインパラメータで指定した変数番号の配列をjson文字列化したもの。
          * @return {number[]} 共有対象変数番号の数値リスト。
@@ -849,7 +847,6 @@ utakata.UTA_CommonSaveMZ = (function() {
          * 
          * 対象番号は数値配列文字列になっている為、parseの必要がある。  
          * 個別の番号指定だけでなく、範囲指定の場合がある。
-         * @private
          * @param {string} targetListStr parse対象の対象番号配列json文字列。
          * @return {number[]} 対象番号配列。
          */
@@ -884,7 +881,6 @@ utakata.UTA_CommonSaveMZ = (function() {
         /**
          * 引数で渡した数字文字列をparseして対象番号の数値リストを得る。  
          * 「-」を利用して範囲指定された番号の解釈も行う。
-         * @private
          * @param {string} targetStr parse対象の数字文字列。
          * @return {number[]} 文字列から得た対象番号のリスト。
          * @throws {UTA_CommonSavePluginParameterError} 文法ミスなどを起因とするparse失敗時に送出する。
@@ -1010,7 +1006,7 @@ utakata.UTA_CommonSaveMZ = (function() {
          * 共有セーブデータ連想配列からCommonSaveDataインスタンスを作成する。
          * @static
          * @param {Object} contents 共有セーブデータ連想配列。
-         * @return {CommonSaveData}
+         * @return {CommonSaveData} 共有セーブデータインスタンス。
          */
         CommonSaveData.fromSaveContents = function(contents) {
             // バージョンのβ版データ構造の違いはVersion.fromDict側で吸収される
@@ -1023,7 +1019,7 @@ utakata.UTA_CommonSaveMZ = (function() {
          * @static
          * @param {number[]} targetSwitches 共有対象スイッチ番号の配列。
          * @param {number[]} targetVariables 共有対象変数番号の配列。
-         * @return {CommonSaveData}
+         * @return {CommonSaveData} 共有セーブデータインスタンス。
          */
         CommonSaveData.fromCurrentGameData = function(targetSwitches, targetVariables) {
             const version = Version.fromString(VERSION);
@@ -1091,7 +1087,6 @@ utakata.UTA_CommonSaveMZ = (function() {
         /**
          * プラグインパラメータのデータ。
          * @static
-         * @private
          * @type {CommonSavePluginParameter}
          */
         CommonSaveManager._parameters = new CommonSavePluginParameter();
@@ -1155,6 +1150,7 @@ utakata.UTA_CommonSaveMZ = (function() {
 
         /**
          * 共有セーブデータから$gameVariablesにデータを反映する。
+         * @static
          * @param {CommonSaveData} commonSaveData 共有セーブデータ。
          * @throws {UTA_CommonSaveError} 読み込み・適用失敗時に送出される。
          */
@@ -1228,7 +1224,6 @@ utakata.UTA_CommonSaveMZ = (function() {
          * 現在のゲームデータから共有セーブデータを作成して保存する。  
          * セーブ時のバックアップはStorageManager.saveObjectメソッドの流れで行われている為、独自に実装しない。
          * @static
-         * @private
          * @return {Promise<number>} StorageManager.saveObjectから続くPromise。
          */
         CommonSaveManager._save = function() {
@@ -1281,6 +1276,7 @@ utakata.UTA_CommonSaveMZ = (function() {
 
         /**
          * プラグインコマンドの実行。
+         * @static
          * @param {string} command プラグインコマンド名。
          * @throws {UTA_CommonSaveError} 無効なプラグインコマンドが指定された場合に送出。
          */
