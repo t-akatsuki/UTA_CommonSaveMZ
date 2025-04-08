@@ -1089,7 +1089,9 @@ utakata.UTA_CommonSaveMZ = (function() {
          * @static
          * @type {CommonSavePluginParameter}
          */
-        CommonSaveManager._parameters = new CommonSavePluginParameter();
+        Object.defineProperty(CommonSaveManager, "_parameters", {
+            value: new CommonSavePluginParameter()
+        });
 
         /**
          * 初期化処理。
