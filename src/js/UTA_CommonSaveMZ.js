@@ -1227,8 +1227,13 @@ utakata.UTA_CommonSaveMZ = (function() {
 
             return StorageManager.loadObject(saveName).then((contents) => {
                 this._loadCore(contents);
-                _logger(Logger.INFO, `load: Loading common save data succeeded. (${saveName})`);
+                _logger(Logger.INFO, `load: Succeeded to load common save data. (${saveName})`);
                 return 0;
+            }).catch((e) => {
+                const errMessage = Object.prototype.hasOwnProperty.call(e, "message") ? e.message : "";
+                _logger(Logger.ERROR, `load: Failed to load common save data. (filename=${saveName})`);
+                _logger(Logger.ERROR, `error message: \n${errMessage}`);
+                throw e;
             });
         };
 
