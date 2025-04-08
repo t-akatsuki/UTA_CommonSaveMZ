@@ -1479,6 +1479,50 @@ utakata.UTA_CommonSaveMZ = (function() {
     const CommonSaveManager = utakata.UTA_CommonSaveMZ.CommonSaveManager;
 
     // ------------------------------------------------------------------
+    // DataManager
+    // ------------------------------------------------------------------
+    /**
+     * DataManager.saveGame
+     * 
+     * セーブ処理に共有セーブデータセーブ処理をフック。  
+     * セーブ処理のPromiseチェーンにつなげる事で実現する。
+     */
+    const DataManager__saveGame = DataManager.saveGame;
+    DataManager.saveGame = function(savefileId) {
+        return DataManager__saveGame.call(this, savefileId).then((ret) => {
+            // セーブが成功した場合は常に0が返される
+            // セーブ失敗時は共有セーブを行わない
+            if (ret !== 0) {
+                return ret;
+            }
+
+            // オートセーブの場合はsavefileId = 0
+            if (savefileId === 0) {
+                /**
+                 * 一度タイトル画面に戻ってから「ニューゲーム/コンティニュー」を選んだ場合に何故かオートセーブ処理が実行されてしまう。  
+                 * 「ニューゲーム」の場合、共有セーブが初期状態で上書きされてしまう問題がある。  
+                 * この事象を回避する為に明らかにゲームスタート直後の場合は共有セーブしないようにする。
+                 */
+                if (CommonSaveManager.isApplyOnAutoSave() && !CommonSaveManager.checkNewGame()) {
+                    // 共有セーブデータのセーブ処理(Promiseを返却)
+                    return CommonSaveManager.save();
+                }
+
+                return ret;
+            }
+
+            // 通常セーブの場合
+            if (CommonSaveManager.isApplyOnSave()) {
+                // 共有セーブデータのセーブ処理(Promiseを返却)
+                return CommonSaveManager.save();
+            }
+
+            return ret;
+        });
+    };
+
+
+    // ------------------------------------------------------------------
     // Scene_Boot
     // ------------------------------------------------------------------
     /**
