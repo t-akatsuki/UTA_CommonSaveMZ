@@ -1601,4 +1601,40 @@ utakata.UTA_CommonSaveMZ = (function() {
         return ret;
     };
 
+    // ------------------------------------------------------------------
+    // Scene_Gameover
+    // ------------------------------------------------------------------
+    /**
+     * Scene_Gameover.prototype.start
+     * 
+     * ゲームオーバー時に共有セーブデータのセーブ処理をフック。  
+     * ゲームオーバー処理が実行されるとタイトル画面に戻ってしまい、
+     * プレイデータが揮発するのでゲームオーバー処理の前に共有セーブデータを保存する。
+     */
+    const Scene_Gameover__prototype__start = Scene_Gameover.prototype.start;
+    Scene_Gameover.prototype.start = function() {
+        const ret = Scene_Gameover__prototype__start.call(this);
+
+        if (CommonSaveManager.isApplyOnGameover()) {
+            void CommonSaveManager.save();
+        }
+
+        return ret;
+    };
+
+    /**
+     * Scene_Gameover.prototype.gotoTitle
+     * 
+     * ゲームオーバー時の自動適用有効時は共有セーブ完了までタイトル画面に遷移させない。  
+     * プレイデータが揮発するので別シーンへの遷移前に共有セーブデータを保存させる。
+     */
+    const Scene_Gameover__prototype__gotoTitle = Scene_Gameover.prototype.gotoTitle;
+    Scene_Gameover.prototype.gotoTitle = function() {
+        if (CommonSaveManager.isApplyOnGameover() && CommonSaveManager.isSaving()) {
+            return;
+        }
+
+        return Scene_Gameover__prototype__gotoTitle.call(this);
+    };
+
 })();
