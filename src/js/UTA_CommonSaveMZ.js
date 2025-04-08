@@ -1094,6 +1094,16 @@ utakata.UTA_CommonSaveMZ = (function() {
         });
 
         /**
+         * 共有セーブデータのセーブ中であるか。
+         * @static
+         * @type {boolean}
+         */
+        Object.defineProperty(CommonSaveManager, "_isSaving", {
+            writable: true,
+            value: false
+        });
+
+        /**
          * 初期化処理。
          * @static
          */
@@ -1238,9 +1248,18 @@ utakata.UTA_CommonSaveMZ = (function() {
             const commonSaveData = CommonSaveData.fromCurrentGameData(targetSwitches, targetVariables);
             const contents = commonSaveData.makeSaveContents();
 
+            this._isSaving = true;
+            const _this = this;
             return StorageManager.saveObject(saveName, contents).then(() => {
                 _logger(Logger.INFO, `save: Succeeded to save common save data. (filename=${saveName})`);
+                _this._isSaving = false;
                 return 0;
+            }).catch((e) => {
+                _this._isSaving = false;
+                const errMessage = Object.prototype.hasOwnProperty.call(e, "message") ? e.message : "";
+                _logger(Logger.ERROR, `save: Failed to save common save data. (filename=${saveName})`);
+                _logger(Logger.ERROR, `error message: \n${errMessage}`);
+                throw e;
             });
         };
 
@@ -1338,6 +1357,15 @@ utakata.UTA_CommonSaveMZ = (function() {
             }
             // 全ての条件を満たす場合は「初めから即セーブ状態」と見なす
             return true;
+        };
+
+        /**
+         * 共有セーブデータのセーブ中であるか。
+         * @static
+         * @return {boolean} 共有セーブデータのセーブ中である場合はtrueを返す。
+         */
+        CommonSaveManager.isSaving = function() {
+            return this._isSaving;
         };
 
         /**
