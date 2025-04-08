@@ -1562,4 +1562,43 @@ utakata.UTA_CommonSaveMZ = (function() {
 
         return ret;
     };
+
+    /**
+     * Scene_Boot.prototype.start
+     * 
+     * 「タイトル画面をスキップ」を有効にしてテストプレイした場合にもニューゲーム時の共有セーブデータ適用を行う。  
+     * ロード処理は非同期に行われる為、適用までに若干のタイムラグが発生する可能性がある。
+     */
+    const Scene_Boot__prototype__start = Scene_Boot.prototype.start;
+    Scene_Boot.prototype.start = function() {
+        const ret = Scene_Boot__prototype__start.call(this);
+
+        if (DataManager.isTitleSkip() && CommonSaveManager.isApplyOnNewGame()) {
+            void CommonSaveManager.load();
+        }
+
+        return ret;
+    };
+
+    // ------------------------------------------------------------------
+    // Scene_Title
+    // ------------------------------------------------------------------
+    /**
+     * Scene_Title.prototype.commandNewGame
+     * 
+     * ニューゲーム時に共有セーブデータのセーブ処理をフック。  
+     * ゲームデータの初期化後にロードする必要がある。  
+     * ロード処理は非同期に行われる為、適用までに若干のタイムラグが発生する可能性がある。
+     */
+    const Scene_Title__prototype__commandNewGame = Scene_Title.prototype.commandNewGame;
+    Scene_Title.prototype.commandNewGame = function() {
+        const ret = Scene_Title__prototype__commandNewGame.call(this);
+
+        if (CommonSaveManager.isApplyOnNewGame()) {
+            void CommonSaveManager.load();
+        }
+
+        return ret;
+    };
+
 })();
