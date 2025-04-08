@@ -1521,6 +1521,30 @@ utakata.UTA_CommonSaveMZ = (function() {
         });
     };
 
+    /**
+     * DataManager.loadGame
+     * 
+     * ロード処理に共有セーブデータロード処理をフック。  
+     * ロード処理のPromiseチェーンにつなげる事で実現する。  
+     * (ロード後に各種ゲームデータが復元された後に実施する)
+     */
+    const DataManager__loadGame = DataManager.loadGame;
+    DataManager.loadGame = function(savefileId) {
+        return DataManager__loadGame.call(this, savefileId).then((ret) => {
+            // ロードが成功した場合は常に0が返される
+            // ロード失敗時は共有セーブを行わない
+            if (ret !== 0) {
+                return ret;
+            }
+
+            if (CommonSaveManager.isApplyOnLoad()) {
+                // 共有セーブデータのロード処理(Promiseを返却)
+                return CommonSaveManager.load();
+            }
+
+            return ret;
+        });
+    };
 
     // ------------------------------------------------------------------
     // Scene_Boot
