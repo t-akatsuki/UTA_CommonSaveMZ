@@ -242,8 +242,9 @@ var utakata = utakata || {};
 /**
  * @namespace utakata.UTA_CommonSaveMZ
  * @property {string} VERSION
- * @property {CommonSaveManager} CommonSaveManager 
+ * @property {CommonSaveManager} CommonSaveManager
  * @property {UTA_CommonSaveError} UTA_CommonSaveError
+ * @property {UTA_CommonSavePluginParameterError} UTA_CommonSavePluginParameterError
  */
 utakata.UTA_CommonSaveMZ = (function() {
     /**
@@ -1465,7 +1466,8 @@ utakata.UTA_CommonSaveMZ = (function() {
     const exports = {
         VERSION: VERSION,
         CommonSaveManager: CommonSaveManager,
-        UTA_CommonSaveError: UTA_CommonSaveError
+        UTA_CommonSaveError: UTA_CommonSaveError,
+        UTA_CommonSavePluginParameterError: UTA_CommonSavePluginParameterError
     };
 
     return exports;
