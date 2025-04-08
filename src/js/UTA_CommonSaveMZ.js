@@ -1471,18 +1471,27 @@ utakata.UTA_CommonSaveMZ = (function() {
     return exports;
 })();
 
-// ------------------------------------------------------------------
+// ----------------------------------------------------------------------
 // コアスクリプト各種メソッドの拡張
-// ------------------------------------------------------------------
+// ----------------------------------------------------------------------
 (function() {
+    // alias
+    const CommonSaveManager = utakata.UTA_CommonSaveMZ.CommonSaveManager;
+
+    // ------------------------------------------------------------------
+    // Scene_Boot
+    // ------------------------------------------------------------------
     /**
-     * Scene_Boot
+     * Scene_Boot.prototype.onDatabaseLoaded
+     * 
+     * ゲームの初期化タイミングでデータベース読み込みに合わせて初期化を行う。
      */
-    // ゲームの初期化タイミングでデータベース読み込みに合わせて初期化を行う
     const Scene_Boot__prototype__onDatabaseLoaded = Scene_Boot.prototype.onDatabaseLoaded;
     Scene_Boot.prototype.onDatabaseLoaded = function() {
-        Scene_Boot__prototype__onDatabaseLoaded.call(this);
+        const ret = Scene_Boot__prototype__onDatabaseLoaded.call(this);
 
-        utakata.UTA_CommonSaveMZ.CommonSaveManager.initialize();
+        CommonSaveManager.initialize();
+
+        return ret;
     };
 })();
