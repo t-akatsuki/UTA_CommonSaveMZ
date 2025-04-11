@@ -589,13 +589,13 @@ utakata.UTA_CommonSaveMZ = (function() {
             try {
                 const versionStrList = versionStr.split(Version.SEPARATOR).map((s) => { return parseInt(s, 10); });
                 if (versionStrList.length !== 3) {
-                    throw new TypeError(`Version string invalid format.`);
+                    throw new TypeError(`Version string invalid format`);
                 }
                 version = new this(...versionStrList);
             } catch (e) {
                 _logger(Logger.ERROR, `fromString: Version string parse error. (versionStr = ${versionStr})`);
                 _logger(Logger.ERROR, e);
-                throw UTA_CommonSaveError(`Parse error: Version string parse error.`);
+                throw new UTA_CommonSaveError(`Parse error: Version string parse error`);
             }
 
             return version;
@@ -803,7 +803,7 @@ utakata.UTA_CommonSaveMZ = (function() {
             }
             if (outOfRangeSwitches.length > 0) {
                 const outOfRangeSwitchesStr = JSON.stringify(outOfRangeSwitches);
-                throw new UTA_CommonSavePluginParameterError(`Target switches specified out of range. (${outOfRangeSwitchesStr})`);
+                throw new UTA_CommonSavePluginParameterError(`Target switches specified out of range (${outOfRangeSwitchesStr})`);
             }
 
             return targetSwitchesNumberList;
@@ -836,7 +836,7 @@ utakata.UTA_CommonSaveMZ = (function() {
             }
             if (outOfRangeVariables.length > 0) {
                 const outOfRangeVariablesStr = JSON.stringify(outOfRangeVariables);
-                throw new UTA_CommonSavePluginParameterError(`Target variables specified out of range. (${outOfRangeVariablesStr})`);
+                throw new UTA_CommonSavePluginParameterError(`Target variables specified out of range (${outOfRangeVariablesStr})`);
             }
 
             return targetVariablesNumberList;
@@ -1082,7 +1082,7 @@ utakata.UTA_CommonSaveMZ = (function() {
          * @constructor
          */
         function CommonSaveManager() {
-            throw new Error(`${this.constructor.name} is static class.`);
+            throw new Error(`${this.constructor.name} is static class`);
         }
 
         /**
@@ -1157,7 +1157,7 @@ utakata.UTA_CommonSaveMZ = (function() {
             } catch (e) {
                 _logger(Logger.ERROR, `Failed to apply game switches from common save data.`);
                 _logger(Logger.ERROR, `${e}`);
-                throw new UTA_CommonSaveError(`Common save appling error `);
+                throw new UTA_CommonSaveError(`Common save apply error`);
             }
         };
 
@@ -1189,7 +1189,7 @@ utakata.UTA_CommonSaveMZ = (function() {
                 const errMessage = Object.prototype.hasOwnProperty.call(e, "message") ? e.message : "";
                 _logger(Logger.ERROR, `Failed to apply game variables from common save data.`);
                 _logger(Logger.ERROR, `error message: \n${errMessage}`);
-                throw new UTA_CommonSaveError(`Common save appling error (${errMessage})`);
+                throw new UTA_CommonSaveError(`Common save apply error (${errMessage})`);
             }
         };
 
@@ -1324,7 +1324,7 @@ utakata.UTA_CommonSaveMZ = (function() {
                     this.check();
                     break;
                 default:
-                    throw new UTA_CommonSaveError(`Invalid plugin command. (${command})`);
+                    throw new UTA_CommonSaveError(`Invalid plugin command (${command})`);
             }
         };
 
