@@ -312,6 +312,28 @@ utakata.UTA_CommonSaveMZ = (function() {
     })();
 
     /**
+     * @extends UTA_CommonSaveError
+     * @class UTA_CommonSaveSecurityError
+     * @classdesc UTA_CommonSaveセキュリティ関連エラークラス。
+     */
+    var UTA_CommonSaveSecurityError = (function() {
+        /**
+         * @constructor
+         * @param  {...any} args 
+         */
+        function UTA_CommonSaveSecurityError(...args) {
+            UTA_CommonSaveError.apply(this, args);
+        }
+
+        // extends Error class
+        UTA_CommonSaveSecurityError.prototype = Object.create(UTA_CommonSaveError.prototype);
+        UTA_CommonSaveSecurityError.prototype.name = "UTA_CommonSaveSecurityError";
+        UTA_CommonSaveSecurityError.prototype.constructor = UTA_CommonSaveSecurityError;
+
+        return UTA_CommonSaveSecurityError;
+    })();
+
+    /**
      * @static
      * @class Logger
      * @classdesc Loggerを扱う静的クラス。
