@@ -886,16 +886,7 @@ utakata.UTA_CommonSaveMZ = (function() {
          */
         CommonSavePluginParameter.prototype._getTargetNumberList = function(targetListStr) {
             let ret = [];
-            let targetList = null;
-
-            try {
-                targetList = JSON.parse(targetListStr);
-            } catch (e) {
-                const errMessage = Object.prototype.hasOwnProperty.call(e, "message") ? e.message : "";
-                _logger(Logger.ERROR, `_getTargetNumberList: Failed to parse target number json string. (${targetListStr})`);
-                _logger(Logger.ERROR, `Error message: \n${errMessage}`);
-                throw new UTA_CommonSavePluginParameterError(`Parse error: json parse error`);
-            }
+            let targetList = this._parseJson(targetListStr);
 
             // 対象番号文字リストをparseしてnumberの配列にする
             for (let i = 0; i < targetList.length; i++) {
@@ -988,6 +979,25 @@ utakata.UTA_CommonSaveMZ = (function() {
                 default:
                     _logger(Logger.ERROR, `_parseBoolean: Failed to parse target boolean string. (${targetStr})`);
                     throw new UTA_CommonSavePluginParameterError(`Parse error: Invalid format (${targetStr})`);
+            }
+            return ret;
+        };
+
+        /**
+         * 引数に渡したjson文字列をparseした結果を返す。
+         * @param {string} targetStr parse対象の文字列。
+         * @return {any} parseした結果。適切な型に変換されて返却される。
+         * @throws {UTA_CommonSavePluginParameterError} parse失敗時に送出する。
+         */
+        CommonSavePluginParameter.prototype._parseJson = function(targetStr) {
+            var ret = null;
+            try {
+                ret = JSON.parse(targetStr);
+            } catch (e) {
+                const errMessage = Object.prototype.hasOwnProperty.call(e, "message") ? e.message : "";
+                _logger(Logger.ERROR, `_parseJson: Failed to parse json string. (${targetStr})`);
+                _logger(Logger.ERROR, `Error message: ${errMessage}`);
+                throw new UTA_CommonSavePluginParameterError(`Parse error: json parse error`);
             }
             return ret;
         };
