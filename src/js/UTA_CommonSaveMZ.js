@@ -828,7 +828,7 @@ utakata.UTA_CommonSaveMZ = (function() {
             } catch (e) {
                 const errMessage = Object.prototype.hasOwnProperty.call(e, "message") ? e.message : "";
                 _logger(Logger.ERROR, `_parseTargetSwitchesNumber: Failed to parse target swiches number.`);
-                _logger(Logger.ERROR, `Error message: \n${errMessage}`);
+                _logger(Logger.ERROR, `Error message: ${errMessage}`);
                 throw new UTA_CommonSavePluginParameterError(`Parsing target switches number failed (${errMessage})`);
             }
 
@@ -861,7 +861,7 @@ utakata.UTA_CommonSaveMZ = (function() {
             } catch (e) {
                 const errMessage = Object.prototype.hasOwnProperty.call(e, "message") ? e.message : "";
                 _logger(Logger.ERROR, `_parseTargetVariabllesNumber: Failed to parse target variables number.`);
-                _logger(Logger.ERROR, `Error message: \n${errMessage}`);
+                _logger(Logger.ERROR, `Error message: ${errMessage}`);
                 throw new UTA_CommonSavePluginParameterError(`Parsing target variables number failed (${errMessage})`);
             }
 
@@ -959,7 +959,7 @@ utakata.UTA_CommonSaveMZ = (function() {
             } catch (e) {
                 const errMessage = Object.prototype.hasOwnProperty.call(e, "message") ? e.message : "";
                 _logger(Logger.ERROR, `_parseTargetNumber: Failed to parse target number. (${targetStr})`);
-                _logger(Logger.ERROR, `Error message: \n${errMessage}`);
+                _logger(Logger.ERROR, `Error message: ${errMessage}`);
                 throw e;
             }
 
@@ -1236,7 +1236,7 @@ utakata.UTA_CommonSaveMZ = (function() {
             } catch (e) {
                 const errMessage = Object.prototype.hasOwnProperty.call(e, "message") ? e.message : "";
                 _logger(Logger.ERROR, `Failed to apply game variables from common save data.`);
-                _logger(Logger.ERROR, `Error message: \n${errMessage}`);
+                _logger(Logger.ERROR, `Error message: ${errMessage}`);
                 throw new UTA_CommonSaveError(`Common save apply error (${errMessage})`);
             }
         };
@@ -1281,7 +1281,7 @@ utakata.UTA_CommonSaveMZ = (function() {
             }).catch((e) => {
                 const errMessage = Object.prototype.hasOwnProperty.call(e, "message") ? e.message : "";
                 _logger(Logger.ERROR, `load: Failed to load common save data. (filename=${saveName})`);
-                _logger(Logger.ERROR, `Error message: \n${errMessage}`);
+                _logger(Logger.ERROR, `Error message: ${errMessage}`);
                 throw e;
             });
         };
@@ -1312,7 +1312,7 @@ utakata.UTA_CommonSaveMZ = (function() {
                 _this._isSaving = false;
                 const errMessage = Object.prototype.hasOwnProperty.call(e, "message") ? e.message : "";
                 _logger(Logger.ERROR, `save: Failed to save common save data. (filename=${saveName})`);
-                _logger(Logger.ERROR, `Error message: \n${errMessage}`);
+                _logger(Logger.ERROR, `Error message: ${errMessage}`);
                 throw e;
             });
         };
