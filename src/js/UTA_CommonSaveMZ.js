@@ -272,11 +272,18 @@ utakata.UTA_CommonSaveMZ = (function() {
          * @param  {...any} args 
          */
         function UTA_CommonSaveError(...args) {
-            Error.apply(this, ...args);
+            Error.apply(this, args);
+            this.message = args.length > 0 ? args[0] : null;
+            if (Error.captureStackTrace) {
+                Error.captureStackTrace(this, UTA_CommonSaveError);
+            } else {
+                this.stack = (new Error(this.message)).stack;
+            }
         }
 
         // extends Error class
         UTA_CommonSaveError.prototype = Object.create(Error.prototype);
+        UTA_CommonSaveError.prototype.name = "UTA_CommonSaveError";
         UTA_CommonSaveError.prototype.constructor = UTA_CommonSaveError;
 
         return UTA_CommonSaveError;
@@ -288,13 +295,17 @@ utakata.UTA_CommonSaveMZ = (function() {
      * @classdesc UTA_CommonSaveプラグインパラメータ関連エラークラス。
      */
     var UTA_CommonSavePluginParameterError = (function() {
-
+        /**
+         * @constructor
+         * @param  {...any} args 
+         */
         function UTA_CommonSavePluginParameterError(...args) {
-            Error.apply(this, args);
+            UTA_CommonSaveError.apply(this, args);
         }
 
         // extends Error class
-        UTA_CommonSavePluginParameterError.prototype = Object.create(Error.prototype);
+        UTA_CommonSavePluginParameterError.prototype = Object.create(UTA_CommonSaveError.prototype);
+        UTA_CommonSavePluginParameterError.prototype.name = "UTA_CommonSavePluginParameterError";
         UTA_CommonSavePluginParameterError.prototype.constructor = UTA_CommonSavePluginParameterError;
 
         return UTA_CommonSavePluginParameterError;
