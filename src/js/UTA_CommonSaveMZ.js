@@ -11,12 +11,13 @@
  * @author 赤月 智平(t-akatsuki)
  * @url https://www.utakata-no-yume.net
  * 
- * @param sharedTarget
+ * @param sharedTargetSettingsGroup
+ * @type select
  * @text 共通対象設定
  * @desc 共有対象に関する設定グループ。
  * 
  * @param targetSwitches
- * @parent sharedTarget
+ * @parent sharedTargetSettingsGroup
  * @type switch[]
  * @default []
  * @text 共有対象スイッチ番号
@@ -24,19 +25,20 @@
  * 「-」で範囲指定が可能。
  * 
  * @param targetVariables
- * @parent sharedTarget
+ * @parent sharedTargetSettingsGroup
  * @type variable[]
  * @default []
  * @text 共有対象変数番号
  * @desc セーブデータ間で共有する変数番号の定義。
  * 「-」で範囲指定が可能。
  * 
- * @param autoApplyLoad
+ * @param autoApplyLoadSettingsGroup
+ * @type select
  * @text 自動適用関連設定
  * @desc 共有セーブの自動適用に関する設定グループ。
  * 
  * @param applyOnLoad
- * @parent autoApplyLoad
+ * @parent autoApplyLoadSettingsGroup
  * @type boolean
  * @default true
  * @on 自動適用する
@@ -45,7 +47,7 @@
  * @desc ロード時に共有セーブデータの自動適用を行うか。
  * 
  * @param applyOnNewGame
- * @parent autoApplyLoad
+ * @parent autoApplyLoadSettingsGroup
  * @type boolean
  * @default true
  * @on 自動適用する
@@ -53,12 +55,13 @@
  * @text ニューゲーム時の共有セーブ自動適用
  * @desc ニューゲーム時に共有セーブの自動適用を行うか。
  * 
- * @param autoApplySave
+ * @param autoSaveSettingsGroup
+ * @type select
  * @text 自動保存関連設定
  * @desc 共有セーブの自動保存に関する設定グループ。
  * 
  * @param applyOnSave
- * @parent autoApplySave
+ * @parent autoSaveSettingsGroup
  * @type boolean
  * @default true
  * @on 自動保存する
@@ -67,7 +70,7 @@
  * @desc セーブ時に共有セーブデータの自動保存を行うか。
  * 
  * @param applyOnAutoSave
- * @parent autoApplySave
+ * @parent autoSaveSettingsGroup
  * @type boolean
  * @default false
  * @on 自動保存する
@@ -76,7 +79,7 @@
  * @desc オートセーブ時に共有セーブの自動保存を行うか。
  * 
  * @param applyOnGameover
- * @parent autoApplySave
+ * @parent autoSaveSettingsGroup
  * @type boolean
  * @default true
  * @on 自動保存する
@@ -85,6 +88,7 @@
  * @desc ゲームオーバー時に共有セーブデータの自動保存を行うか。
  * 
  * @param saveFileName
+ * @parent advancedSettingsGroup
  * @type string
  * @default uta_common
  * @text 共有セーブデータファイル名
@@ -92,6 +96,7 @@
  * 拡張子は自動設定される為含めない。
  * 
  * @param logLevel
+ * @parent advancedSettingsGroup
  * @type select
  * @default error
  * @option ERROR
