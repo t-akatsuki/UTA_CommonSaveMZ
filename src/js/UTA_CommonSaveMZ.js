@@ -1461,6 +1461,24 @@ utakata.UTA_CommonSaveMZ = (function() {
         };
 
         /**
+         * 共有セーブデータの同一ゲームチェック処理を実施する。
+         * @param {CommonSaveData} commonSaveData 共有セーブデータ。
+         * @return {boolean} 同一ゲームチェックOKだった場合はtrueを返す。
+         */
+        CommonSaveManager._checkGameIdentity = function(commonSaveData) {
+            _logger(Logger.DEBUG, `_checkGameIdentity: Common save data gameIdentity = ${commonSaveData.gameIdentity}`);
+
+            // β版共有セーブデータの場合は互換を許可している場合はOKとみなす
+            if (commonSaveData.isBetaVersion()) {
+                _logger(Logger.DEBUG, `_checkGameIdentity: Detected beta version common save data. (${commonSaveData.version.toString()})`);
+                return this._parameters.isCompatibledBetaCommonSaveData;
+            }
+
+            // 同一ゲームチェック処理結果を返す
+            return GameIdentityValidator.validate(commonSaveData, this._parameters.allowedGameIdList);
+        };
+
+        /**
          * 共有セーブデータのロード処理のコア部分。  
          * セーブデータバージョンによる差異の吸収などを担う。
          * @static
@@ -1468,6 +1486,17 @@ utakata.UTA_CommonSaveMZ = (function() {
          */
         CommonSaveManager._loadCore = function(contents) {
             const commonSaveData = CommonSaveData.fromSaveContents(contents);
+
+            /**
+             * 同一ゲームチェック処理
+             */
+            if (this._parameters.isEnabledIdentityCheck) {
+                const isValid = this._checkGameIdentity(commonSaveData);
+                if (!isValid) {
+                    _logger(Logger.ERROR, `_loadCore: Detect invalid game id in loading common save data.`);
+                    throw new UTA_CommonSaveSecurityError(`Detect invalid game id in loading common save data`);
+                }
+            }
 
             /**
              * 各種データをゲーム状態に反映する
