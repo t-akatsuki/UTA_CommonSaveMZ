@@ -1099,8 +1099,9 @@ utakata.UTA_CommonSaveMZ = (function() {
          * @param {Version} version バージョン。
          * @param {Object.<number, number>} gameSwitches 共有対象スイッチ情報の連想配列。
          * @param {Object.<number, number>} gameVariables 共有対象変数情報の連想配列。
+         * @param {string|null} gameIdentity ゲーム一意ID。
          */
-        function CommonSaveData(version, gameSwitches = {}, gameVariables = {}) {
+        function CommonSaveData(version, gameSwitches = {}, gameVariables = {}, gameIdentity = null) {
             /**
              * @type {Version} バージョン。
              */
@@ -1113,6 +1114,10 @@ utakata.UTA_CommonSaveMZ = (function() {
              * @type {Object.<number, number>} 共有対象変数情報。
              */
             this.gameVariables = Object.assign({}, gameVariables);
+            /**
+             * @type {string|null} ゲーム一意ID。
+             */
+            this.gameIdentity = gameIdentity;
         }
 
         /**
