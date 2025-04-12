@@ -806,14 +806,14 @@ utakata.UTA_CommonSaveMZ = (function() {
          */
         CommonSavePluginParameter.prototype.parse = function(parameters) {
             /**
-             * targetSwitches: string[] -> number[]
+             * targetSwitches: string -> number[]
              */
             if (Object.prototype.hasOwnProperty.call(parameters, "targetSwitches")) {
                 this.targetSwitches = this._parseTargetSwitchesNumber(parameters.targetSwitches);
             }
 
             /**
-             * targetVariables: string[] -> number[]
+             * targetVariables: string -> number[]
              */
             if (Object.prototype.hasOwnProperty.call(parameters, "targetVariables")) {
                 this.targetVariables = this._parseTargetVariabllesNumber(parameters.targetVariables);
