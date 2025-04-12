@@ -22,9 +22,9 @@
     "@stylistic/eslint-plugin-js": "4.2.0",
     "browserslist": "4.24.4",
     "editorconfig": "2.0.1",
-    "eslint": "9.22.0",
+    "eslint": "9.24.0",
     "eslint-plugin-compat": "6.0.2",
     "globals": "16.0.0",
-    "npm-check-updates": "17.1.15"
+    "npm-check-updates": "17.1.18"
   }
 }
