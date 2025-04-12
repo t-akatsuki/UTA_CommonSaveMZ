@@ -1139,7 +1139,8 @@ utakata.UTA_CommonSaveMZ = (function() {
             const contents = {
                 version: this.version.getVersionDict(),
                 gameSwitches: this.gameSwitches,
-                gameVariables: this.gameVariables
+                gameVariables: this.gameVariables,
+                gameIdentity: this.gameIdentity
             };
             return contents;
         };
