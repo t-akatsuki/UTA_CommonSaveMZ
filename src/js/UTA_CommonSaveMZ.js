@@ -87,6 +87,44 @@
  * @text ゲームオーバー時の共有セーブ自動保存
  * @desc ゲームオーバー時に共有セーブデータの自動保存を行うか。
  * 
+ * @param securitySettingsGroup
+ * @type select
+ * @text セキュリティ関連設定
+ * @desc セキュリティ関連設定グループ。
+ * 
+ * @param isEnabledIdentityCheck
+ * @parent securitySettingsGroup
+ * @type boolean
+ * @default true
+ * @on 有効にする
+ * @off 無効にする
+ * @text 同一ゲームチェック機能の有効化
+ * @desc 共有セーブデータロード時の同一ゲームチェック機能を
+ * 有効にするか。
+ * 
+ * @param allowedGameIdList
+ * @parent securitySettingsGroup
+ * @type text[]
+ * @default []
+ * @text 追加許容ゲームID
+ * @desc 同一ゲームチェックで追加許容するゲームIDのリスト。
+ * 別ゲームで作成されたセーブを許容したい場合に設定する。
+ * 
+ * @param isCompatibledBetaCommonSaveData
+ * @parent securitySettingsGroup
+ * @type boolean
+ * @default false
+ * @on 有効にする
+ * @off 無効にする
+ * @text β版共有セーブデータ互換機能の有効化
+ * @desc β版の共有セーブデータの互換性機能を有効にするか。
+ * β版を利用していて後方互換を維持したい場合のみ有効にする。
+ * 
+ * @param advancedSettingsGroup
+ * @type select
+ * @text 上級者向け設定
+ * @desc 上級者向け設定グループ。
+ * 
  * @param saveFileName
  * @parent advancedSettingsGroup
  * @type string
@@ -714,6 +752,24 @@ utakata.UTA_CommonSaveMZ = (function() {
             this.isApplyOnGameover = true;
 
             /**
+             * 同一ゲームチェック機能を有効にするか。
+             * @type {boolean}
+             */
+            this.isEnabledIdentityCheck = true;
+
+            /**
+             * 同一ゲームチェックで追加許容するゲームIDのリスト。
+             * @type {string[]}
+             */
+            this.allowedGameIdList = [];
+
+            /**
+             * β版の共有セーブデータの互換性機能を有効にするか。
+             * @type {boolean}
+             */
+            this.isCompatibledBetaCommonSaveData = false;
+
+            /**
              * 共有セーブデータファイル名。  
              * 拡張子は自動設定される為含めない。
              * @type {string}
@@ -796,6 +852,27 @@ utakata.UTA_CommonSaveMZ = (function() {
              */
             if (Object.prototype.hasOwnProperty.call(parameters, "applyOnGameover")) {
                 this.isApplyOnGameover = this._parseBoolean(parameters.applyOnGameover);
+            }
+
+            /**
+             * isEnabledIdentityCheck: string -> bool
+             */
+            if (Object.prototype.hasOwnProperty.call(parameters, "isEnabledIdentityCheck")) {
+                this.isEnabledIdentityCheck = this._parseBoolean(parameters.isEnabledIdentityCheck);
+            }
+
+            /**
+             * allowedGameIdList: string -> string[]
+             */
+            if (Object.prototype.hasOwnProperty.call(parameters, "allowedGameIdList")) {
+                this.allowedGameIdList = this._parseJson(parameters.allowedGameIdList);
+            }
+
+            /**
+             * isCompatibledBetaCommonSaveData: string -> boolean
+             */
+            if (Object.prototype.hasOwnProperty.call(parameters, "isCompatibledBetaCommonSaveData")) {
+                this.isCompatibledBetaCommonSaveData = this._parseBoolean(parameters.isCompatibledBetaCommonSaveData);
             }
 
             /**
