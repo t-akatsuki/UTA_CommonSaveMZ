@@ -1121,6 +1121,17 @@ utakata.UTA_CommonSaveMZ = (function() {
         }
 
         /**
+         * 最初のstable版バージョン。
+         * @static
+         * @readonly
+         * @type {Version}
+         */
+        Object.defineProperty(CommonSaveData, "FIRST_STABLE_VERSION", {
+            writable: false,
+            value: new Version(1, 0, 0)
+        });
+
+        /**
          * セーブデータ格納用の連想配列を作成する。
          * @return {Object<string, any>}
          */
@@ -1131,6 +1142,14 @@ utakata.UTA_CommonSaveMZ = (function() {
                 gameVariables: this.gameVariables
             };
             return contents;
+        };
+
+        /**
+         * β版の共有セーブデータであるか。
+         * @return {boolean} β版の共有セーブデータの場合はtrueを返す。
+         */
+        CommonSaveData.prototype.isBetaVersion = function() {
+            return this.version.isOlderThan(CommonSaveData.FIRST_STABLE_VERSION);
         };
 
         /**
