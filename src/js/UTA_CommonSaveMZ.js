@@ -1162,7 +1162,10 @@ utakata.UTA_CommonSaveMZ = (function() {
         CommonSaveData.fromSaveContents = function(contents) {
             // バージョンのβ版データ構造の違いはVersion.fromDict側で吸収される
             const version = Version.fromDict(contents.version);
-            return new this(version, contents.gameSwitches, contents.gameVariables);
+            const gameSwitches = Object.prototype.hasOwnProperty.call(contents, "gameSwitches") ? contents.gameSwitches : {};
+            const gameVariables = Object.prototype.hasOwnProperty.call(contents, "gameVariables") ? contents.gameVariables : {};
+            const gameIdentity = Object.prototype.hasOwnProperty.call(contents, "gameIdentity") ? contents.gameIdentity : null;
+            return new this(version, gameSwitches, gameVariables, gameIdentity);
         };
 
         /**
@@ -1176,7 +1179,8 @@ utakata.UTA_CommonSaveMZ = (function() {
             const version = Version.fromString(VERSION);
             const gameSwitches = this.makeGameSwitchesJson(targetSwitches);
             const gameVariables = this.makeGameVariablesJson(targetVariables);
-            return new this(version, gameSwitches, gameVariables);
+            const gameIdentity = GameIdentityValidator.createGameIdentity($dataSystem.advanced.gameId);
+            return new this(version, gameSwitches, gameVariables, gameIdentity);
         };
 
         /**
