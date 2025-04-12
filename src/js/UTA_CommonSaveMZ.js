@@ -1512,7 +1512,7 @@ utakata.UTA_CommonSaveMZ = (function() {
          */
         CommonSaveManager.load = function() {
             const saveName = this._parameters.saveFileName;
-            _logger(Logger.DEBUG, `load: target save name = ${saveName}`);
+            _logger(Logger.DEBUG, `load: Target save name = ${saveName}`);
 
             // セーブデータが存在しない場合は何もしない
             if (!this.exists()) {
