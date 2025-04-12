@@ -1197,6 +1197,119 @@ utakata.UTA_CommonSaveMZ = (function() {
 
     /**
      * @static
+     * @class GameIdentityValidator
+     * @classdesc 同一ゲームチェック関連の処理を扱う静的クラス。
+     */
+    var GameIdentityValidator = (function() {
+        const _logger = Logger.getLogger("GameIdentityValidator");
+
+        /**
+         * @constructor
+         */
+        function GameIdentityValidator() {
+            throw new Error(`${this.constructor.name} is static class`);
+        }
+
+        Object.defineProperty(GameIdentityValidator, "RS", {
+            writable: false,
+            value: "abcdefghijklmnopqrstuvmxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        });
+
+        Object.defineProperty(GameIdentityValidator, "S_SIZE", {
+            writable: false,
+            value: 4
+        });
+
+        Object.defineProperty(GameIdentityValidator, "SP", {
+            writable: false,
+            value: "-"
+        });
+
+        /**
+         * @static
+         * @return {string}
+         */
+        GameIdentityValidator._s = function() {
+            const s = Array(this.S_SIZE);
+            for (let i = 0; i < s.length; i++) {
+                s[i] = this.RS[Math.floor(Math.random() * this.RS.length)];
+            }
+            return s.join("");
+        };
+
+        /**
+         * 共有セーブデータ用のゲーム一意IDを生成する。
+         * @static
+         * @param {*} gameId 
+         * @param {*} s 
+         * @return {string} 生成したゲーム一意ID。
+         */
+        GameIdentityValidator.createGameIdentity = function(gameId, s = null) {
+            let ret = "";
+            try {
+                if (!s) {
+                    s = this._s();
+                }
+                const seeds = [Utils.RPGMAKER_NAME, PLUGIN_NAME, gameId, s];
+                const b = Array.from(s).map((t) => {
+                    return t.charCodeAt(0).toString(16);
+                }).join("") + window.btoa(Array.from(seeds.join(this.SP)).map((t) => {
+                    return t.charCodeAt(0).toString(16);
+                }).join(""));
+                ret = b;
+            } catch (e) {
+                const errMessage = Object.prototype.hasOwnProperty.call(e, "message") ? e.message : "";
+                _logger(Logger.ERROR, `Failed to create game identity.`);
+                _logger(Logger.ERROR, `Error message: ${errMessage}`);
+                throw new UTA_CommonSaveError(`Create game identity error (${errMessage})`);
+            }
+            return ret;
+        };
+
+        /**
+         * 同一ゲームチェック検証処理。
+         * @static
+         * @param {CommonSaveData} commonSaveData 比較対象の共有セーブデータ。
+         * @param {allowedGameIdList} 追加許可するゲームIDのリスト。
+         * @return {boolean} 同一ゲームであると判定された場合はtrueを返す。
+         */
+        GameIdentityValidator.validate = function(commonSaveData, allowedGameIdList = []) {
+            let ret = false;
+            try {
+                const gameIdentity = commonSaveData.gameIdentity;
+                if (!gameIdentity) {
+                    throw new TypeError("Invalid gameIdentity");
+                }
+
+                const s = gameIdentity.slice(0, this.S_SIZE * 2).match(/.{1,2}/g).map((b) => {
+                    return String.fromCharCode(parseInt(b, 16));
+                }).join("");
+
+                let gids = [`${$dataSystem.advanced.gameId}`];
+                gids.push.apply(gids, allowedGameIdList);
+                for (let i = 0; i < gids.length; i++) {
+                    const cid = this.createGameIdentity(gids[i], s);
+                    if (cid === gameIdentity) {
+                        ret = true;
+                        break;
+                    }
+                }
+            } catch (e) {
+                const errMessage = Object.prototype.hasOwnProperty.call(e, "message") ? e.message : "";
+                _logger(Logger.ERROR, `Failed to validate game identity. exception occerred.`);
+                _logger(Logger.ERROR, `Error message: ${errMessage}`);
+                throw new UTA_CommonSaveError(`Validation error (${errMessage})`);
+            }
+
+            _logger(Logger.DEBUG, `validate: Processing result = ${ret} (allowedGameIdList=${JSON.stringify(allowedGameIdList)})`);
+            return ret;
+        };
+
+        return GameIdentityValidator;
+    })();
+
+    /**
+     * @static
      * @class CommonSaveManager
      * @classdesc 共有セーブ関連の処理を扱う静的クラス。
      */
