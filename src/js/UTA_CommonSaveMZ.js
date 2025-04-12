@@ -143,8 +143,6 @@
  * @value warn
  * @option INFO
  * @value info
- * @option LOG
- * @value log
  * @option DEBUG
  * @value debug
  * @text ログレベル
